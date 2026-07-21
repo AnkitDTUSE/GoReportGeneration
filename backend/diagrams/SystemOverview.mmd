@@ -1,0 +1,45 @@
+flowchart LR
+
+subgraph Frontend
+    A[Enter PostgreSQL Connection Details]
+    B[Display Tables & Relationships]
+    C[Choose Existing Template<br/>or Create New Template]
+    D[Submit Report Request]
+    E[Display Report]
+end
+
+subgraph Backend
+    F[Connection API]
+    G[Read Database Metadata]
+    H[Return Schema to UI]
+
+    I[Report API]
+    J[Load/Create Template]
+    K[Generate SQL]
+    L[Execute Query]
+end
+
+subgraph PostgreSQL
+    M[(reportGen Database)]
+    N[Business Tables]
+    O[reportTemplate]
+end
+
+A --> F
+F --> M
+
+M --> G
+G --> H
+H --> B
+
+B --> C
+C --> D
+
+D --> I
+I --> J
+J --> O
+J --> K
+K --> L
+L --> N
+
+L --> E

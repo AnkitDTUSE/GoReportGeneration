@@ -1,0 +1,65 @@
+flowchart TD
+
+    A[User Opens Template Designer] --> B{Select Database Source}
+
+    B -->|Hosted PostgreSQL| C[Enter PostgreSQL Connection URL]
+    B -->|Local PostgreSQL| D[Use Local Connection]
+
+    C --> E[Validate Connection]
+    D --> E
+
+    E -->|Success| F[Read Database Metadata]
+    E -->|Failed| G[Show Connection Error]
+
+    F --> H[Fetch Tables]
+    F --> I[Fetch Columns]
+    F --> J[Fetch Primary Keys]
+    F --> K[Fetch Foreign Keys / Relationships]
+
+    H --> L[Build Database Model]
+    I --> L
+    J --> L
+    K --> L
+
+    L --> M[Display Visual Schema]
+
+    M --> N[Show Tables]
+    N --> O[
+    Example
+
+    Customer
+    • customer_id
+    • name
+    • email
+
+    Orders
+    • order_id
+    • customer_id
+    • amount
+    ]
+
+    L --> P[Display Relationship Lines]
+
+    O --> Q[User Selects Columns]
+    P --> Q
+
+    Q --> R{Selection Valid?}
+
+    R -->|No| S[Highlight Invalid Join or Constraint]
+    S --> Q
+
+    R -->|Yes| T[Build Template Configuration]
+
+    T --> U[Optional Filters]
+    U --> X[Submit Template Definition]
+
+    X --> Y[Backend API]
+
+    subgraph Backend
+        Y --> Z[Validate Metadata]
+        Z --> AA[Generate Required JOINs]
+        AA --> AB[Generate SQL Query]
+        AB --> AC[Store Template]
+    end
+
+    AC --> AD[Template Ready for Report Generation]

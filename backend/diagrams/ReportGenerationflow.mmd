@@ -1,0 +1,46 @@
+flowchart TD
+
+    A[User Opens Report Generator] --> B{Choose Action}
+
+    %% Existing Template Flow
+    B -->|Use Existing Template| C[Fetch Report Templates]
+    C --> D[(PostgreSQL<br/>DB: reportGen<br/>Table: reportTemplate)]
+    D --> E[Display Available Templates]
+    E --> F[User Selects Template]
+
+    F --> G[Load Template Configuration]
+    G --> H{Customize Template?}
+
+    H -->|No| I[Use Template As-Is]
+    H -->|Yes| J[Add / Remove Attributes]
+    J --> K[Update Runtime Template]
+
+    %% New Template Flow
+    B -->|Create New Template| L[Create New Template]
+    L --> M[Browse Tables in reportGen DB]
+    M --> N[Select Required Tables]
+    N --> O[Select Required Columns]
+    O --> P[Define Relationships / Joins]
+    P --> Q[Generate SQL Query]
+    Q --> R[Preview Template]
+    R --> S{Save Template?}
+    S -->|Yes| T[Store in reportTemplate]
+    S -->|No| U[Use One-Time Template]
+
+    %% Merge
+    I --> V[Report Generation Engine]
+    K --> V
+    T --> V
+    U --> V
+
+    %% Query Execution
+    V --> W[Build Final SQL]
+    W --> X[Execute Query]
+    X --> Y[(reportGen Database)]
+    Y --> Z[Retrieve Report Data]
+
+    %% Output
+    Z --> AA[Populate Report]
+    AA --> AB[Generate Output]
+    AB --> AC[Preview]
+    AC --> AD[Export PDF / Excel / CSV]
