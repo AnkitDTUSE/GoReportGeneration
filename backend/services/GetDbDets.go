@@ -1,6 +1,10 @@
 package services
 
-import "gorm.io/gorm"
+import (
+	"goReportGeneration/constants"
+
+	"gorm.io/gorm"
+)
 
 type DatabaseSchema struct {
 	Tables        []Table        `json:"tables"`
@@ -42,68 +46,25 @@ func GetDatabaseDetails(db *gorm.DB) (*DatabaseSchema, error) {
 	)
 
 	// Get Tables
-	queryTables := `SELECT
-			table_schema AS schema,
-			table_name AS name
-			FROM information_schema.tables
-			WHERE table_type = 'BASE TABLE'
-			AND table_schema NOT IN ('pg_catalog','information_schema')
-			ORDER BY table_schema, table_name;`
-
-	err := db.Raw(queryTables).Scan(&tables).Error
+	err := db.Raw(constants.QueryTables).Scan(&tables).Error
 	if err != nil {
 		return nil, err
 	}
 
 	// Get Columns
-
-	queryColumns := `
-		SELECT
-			table_name,
-			column_name,
-			data_type,
-			is_nullable
-		FROM information_schema.columns
-		WHERE table_schema NOT IN ('pg_catalog','information_schema')
-		ORDER BY table_name, ordinal_position;
-	`
-
-	err = db.Raw(queryColumns).Scan(&columns).Error
+	err = db.Raw(constants.QueryColumns).Scan(&columns).Error
 	if err != nil {
 		return nil, err
 	}
 
 	// Get primaryKeys
-	queryPks := `
-		SELECT
-			tc.table_name,
-			kcu.column_name
-		FROM information_schema.table_constraints tc
-		JOIN information_schema.key_column_usage kcu
-			ON tc.constraint_name = kcu.constraint_name
-		WHERE tc.constraint_type = 'PRIMARY KEY';
-	`
-	err = db.Raw(queryPks).Scan(&primaryKeys).Error
+	err = db.Raw(constants.QueryPks).Scan(&primaryKeys).Error
 	if err != nil {
 		return nil, err
 	}
 
 	// Get Relationships
-
-	queryRelations := `
-		SELECT
-			tc.table_name AS from_table,
-			kcu.column_name AS from_column,
-			ccu.table_name AS to_table,
-			ccu.column_name AS to_column
-		FROM information_schema.table_constraints tc
-		JOIN information_schema.key_column_usage kcu
-			ON tc.constraint_name = kcu.constraint_name
-		JOIN information_schema.constraint_column_usage ccu
-			ON tc.constraint_name = ccu.constraint_name
-		WHERE tc.constraint_type = 'FOREIGN KEY';
-	`
-	err = db.Raw(queryRelations).Scan(&relationships).Error
+	err = db.Raw(constants.QueryRelations).Scan(&relationships).Error
 	if err != nil {
 		return nil, err
 	}
