@@ -23,8 +23,6 @@ type RelEdge struct {
 	ToColumn   string
 }
 
-// BuildQueryFromSchema generates a SELECT query based on database schema and requested table attributes.
-// It checks for non-existent (false) attributes/tables and verifies integrity constraints (relationships).
 func BuildQueryFromSchema(schema *DatabaseSchema, req *CreateQueryRequest) (string, error) {
 	
 	if req == nil || len(req.Selected) == 0 {

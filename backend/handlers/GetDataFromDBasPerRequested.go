@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"goReportGeneration/config"
 	"goReportGeneration/services"
 	"net/http"
 
@@ -11,15 +10,12 @@ import (
 
 func GetDataFromDBasPerRequested(c *gin.Context, db *gorm.DB) {
 	if db == nil {
-		db = config.DB
-	}
-	if db == nil {
 		db = AnonymousDB
 	}
 
 	if db == nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Database connection is not initialized. Please connect to a database or set DSN in .env.",
+			"error": "Database connection is not initialized. Please connect to a database by submitting DSN.",
 		})
 		return
 	}

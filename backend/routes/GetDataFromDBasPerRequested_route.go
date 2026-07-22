@@ -11,6 +11,6 @@ func GetData(app *gin.Engine) {
 		handlers.GetDataFromDBasPerRequested(c, handlers.AnonymousDB)
 	}
 
-	// app.POST("/api/v1/getData", handler)
+	app.POST("/api/v1/getData", handler)
 	app.GET("/api/v1/getData", handler)
 }

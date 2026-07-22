@@ -32,6 +32,14 @@ func ConnectToDB(c *gin.Context) {
 
 	AnonymousDB = db
 
-	c.Redirect(http.StatusSeeOther, "/api/v1/getDets")
+	schema, err := services.GetDatabaseDetails(db)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Database connected successfully",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, schema)
 }
 

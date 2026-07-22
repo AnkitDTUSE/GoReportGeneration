@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"goReportGeneration/config"
 	"goReportGeneration/services"
 
 	"github.com/gin-gonic/gin"
@@ -10,10 +9,14 @@ import (
 
 func GetSchema(c *gin.Context, db *gorm.DB) {
 	if db == nil {
-		db = config.DB
-	}
-	if db == nil {
 		db = AnonymousDB
+	}
+
+	if db == nil {
+		c.JSON(400, gin.H{
+			"error": "No active database connection. Please enter your DSN details first.",
+		})
+		return
 	}
 
 	schema, err := services.GetDatabaseDetails(db)
