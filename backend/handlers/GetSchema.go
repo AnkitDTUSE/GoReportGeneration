@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"goReportGeneration/config"
 	"goReportGeneration/services"
 
 	"github.com/gin-gonic/gin"
@@ -8,6 +9,13 @@ import (
 )
 
 func GetSchema(c *gin.Context, db *gorm.DB) {
+	if db == nil {
+		db = config.DB
+	}
+	if db == nil {
+		db = AnonymousDB
+	}
+
 	schema, err := services.GetDatabaseDetails(db)
 
 	if err != nil {

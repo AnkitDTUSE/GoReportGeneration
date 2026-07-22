@@ -1,6 +1,7 @@
 package services
 
 import (
+	"fmt"
 	"goReportGeneration/constants"
 
 	"gorm.io/gorm"
@@ -38,6 +39,10 @@ type Relationship struct {
 }
 
 func GetDatabaseDetails(db *gorm.DB) (*DatabaseSchema, error) {
+	if db == nil {
+		return nil, fmt.Errorf("database connection is not initialized. Please connect to your database first")
+	}
+
 	var (
 		tables        []Table
 		columns       []Column
@@ -70,7 +75,6 @@ func GetDatabaseDetails(db *gorm.DB) (*DatabaseSchema, error) {
 	}
 
 	// Build Pk map
-
 	pkMap := make(map[string]map[string]bool)
 
 	for _, pk := range primaryKeys {
@@ -81,7 +85,6 @@ func GetDatabaseDetails(db *gorm.DB) (*DatabaseSchema, error) {
 	}
 
 	// attach columns to tables
-
 	colMap := make(map[string][]Column)
 
 	for _, col := range columns {
