@@ -1,0 +1,109 @@
+    flowchart TD
+
+    %% ---------------- Frontend ----------------
+    subgraph Frontend
+
+    A[Open Report Generator]
+
+    B[Login?]
+
+    C[View Saved Templates]
+
+    D[Select Existing Template]
+
+    E[Modify Template]
+
+    F[Enter PostgreSQL Connection Details]
+
+    G[Connect to Database]
+
+    H[Display Tables & Relationships]
+
+    I[Select Tables & Columns]
+
+    J{Selection Valid?}
+
+    K[Show Validation Errors]
+
+    L[Generate Report]
+
+    M[Preview Report]
+
+    N[Download Report]
+
+    O[Save as New Template]
+
+    end
+
+    %% ---------------- Backend ----------------
+    subgraph Backend
+
+    AUTH[Authentication API]
+
+    CONN[Connection API]
+
+    META[Schema Discovery Service]
+
+    REPORT[Report Generation API]
+
+    QUERY[Dynamic Query Builder]
+
+    TEMPLATE[Template Service]
+
+    end
+
+    %% ---------------- Databases ----------------
+    subgraph Databases
+
+    USERDB[(Application Database)]
+
+    EXTDB[(User PostgreSQL Database)]
+
+    end
+
+    %% -------- Login --------
+
+    A --> B
+
+    B -- Logged In --> AUTH
+    AUTH --> USERDB
+    USERDB --> C
+
+    C --> D
+    D --> E
+    E --> L
+
+    B -- Continue Without Login --> F
+
+    %% -------- New Report --------
+
+    C --> F
+
+    F --> G
+    G --> CONN
+    CONN --> EXTDB
+
+    EXTDB --> META
+    META --> H
+
+    H --> I
+
+    I --> J
+
+    J -- No --> K
+    K --> I
+
+    J -- Yes --> L
+
+    L --> REPORT
+    REPORT --> QUERY
+    QUERY --> EXTDB
+
+    EXTDB --> M
+    M --> N
+
+    %% -------- Save Template --------
+
+    M --> O
+    O --> TEMPLATE
+    TEMPLATE --> USERDB

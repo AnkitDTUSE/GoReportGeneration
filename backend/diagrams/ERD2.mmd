@@ -1,0 +1,24 @@
+erDiagram
+
+    USER ||--o{ DB_CONN : owns
+    DB_CONN ||--o{ REPORT_TEMPLATE : contains
+
+    USER {
+        int id PK
+        string username UK
+        string email UK
+        string password
+        timestamp created_at
+    }
+
+    DB_CONN {
+        int id PK
+        int user_id FK
+        string db_name
+    }
+
+    REPORT_TEMPLATE {
+        int id PK
+        int db_conn_id FK
+        json template
+    }
