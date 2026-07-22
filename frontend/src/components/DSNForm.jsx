@@ -27,38 +27,38 @@ export default function DSNForm({ onConnect, error, loading }) {
 
   return (
     <div style={{ maxWidth: '540px', margin: '40px auto', padding: '0 20px' }}>
-      <div className="glass-panel animate-fade-in" style={{ padding: '36px' }}>
+      <div className="panel panel-blue animate-fade-in" style={{ padding: '36px' }}>
         <div style={{ textAlign: 'center', marginBottom: '28px' }}>
           <div style={{
             width: '56px',
             height: '56px',
-            borderRadius: '16px',
-            background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(6, 182, 212, 0.2))',
-            border: '1px solid var(--border-active)',
+            borderRadius: '12px',
+            background: '#00b4d8',
+            border: '1px solid #caf0f8',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             margin: '0 auto 16px auto'
           }}>
-            <Database size={28} color="var(--accent-cyan)" />
+            <Database size={26} color="#03045e" />
           </div>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 800 }}>Connect to Database</h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '6px' }}>
+          <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#caf0f8' }}>Connect to Database</h2>
+          <p style={{ color: '#90e0ef', fontSize: '0.88rem', marginTop: '6px' }}>
             Provide DSN details for your PostgreSQL database to analyze schema & generate reports.
           </p>
         </div>
 
         {error && (
           <div style={{
-            background: 'rgba(244, 63, 94, 0.12)',
-            border: '1px solid rgba(244, 63, 94, 0.3)',
+            background: 'rgba(248, 113, 113, 0.15)',
+            border: '1px solid #f87171',
             borderRadius: 'var(--radius-md)',
             padding: '12px 16px',
             marginBottom: '24px',
             display: 'flex',
             alignItems: 'center',
             gap: '12px',
-            color: 'var(--accent-rose)',
+            color: '#f87171',
             fontSize: '0.88rem'
           }}>
             <AlertCircle size={18} style={{ flexShrink: 0 }} />
@@ -69,11 +69,11 @@ export default function DSNForm({ onConnect, error, loading }) {
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '14px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#caf0f8', marginBottom: '6px' }}>
                 Host
               </label>
               <div style={{ position: 'relative' }}>
-                <Server size={16} style={{ position: 'absolute', left: '12px', top: '12px', color: 'var(--text-dim)' }} />
+                <Server size={16} style={{ position: 'absolute', left: '12px', top: '12px', color: '#00b4d8' }} />
                 <input
                   type="text"
                   name="host"
@@ -84,10 +84,10 @@ export default function DSNForm({ onConnect, error, loading }) {
                   style={{
                     width: '100%',
                     padding: '10px 12px 10px 36px',
-                    background: 'var(--bg-secondary)',
-                    border: '1px solid var(--border-color)',
+                    background: '#030838',
+                    border: '1px solid #0077b6',
                     borderRadius: 'var(--radius-md)',
-                    color: 'var(--text-main)',
+                    color: '#caf0f8',
                     fontSize: '0.9rem'
                   }}
                 />
@@ -95,7 +95,7 @@ export default function DSNForm({ onConnect, error, loading }) {
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#caf0f8', marginBottom: '6px' }}>
                 Port
               </label>
               <input
@@ -108,10 +108,10 @@ export default function DSNForm({ onConnect, error, loading }) {
                 style={{
                   width: '100%',
                   padding: '10px 12px',
-                  background: 'var(--bg-secondary)',
-                  border: '1px solid var(--border-color)',
+                  background: '#030838',
+                  border: '1px solid #0077b6',
                   borderRadius: 'var(--radius-md)',
-                  color: 'var(--text-main)',
+                  color: '#caf0f8',
                   fontSize: '0.9rem'
                 }}
               />
@@ -119,11 +119,11 @@ export default function DSNForm({ onConnect, error, loading }) {
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#caf0f8', marginBottom: '6px' }}>
               Database Name
             </label>
             <div style={{ position: 'relative' }}>
-              <Database size={16} style={{ position: 'absolute', left: '12px', top: '12px', color: 'var(--text-dim)' }} />
+              <Database size={16} style={{ position: 'absolute', left: '12px', top: '12px', color: '#00b4d8' }} />
               <input
                 type="text"
                 name="dbname"
@@ -134,10 +134,10 @@ export default function DSNForm({ onConnect, error, loading }) {
                 style={{
                   width: '100%',
                   padding: '10px 12px 10px 36px',
-                  background: 'var(--bg-secondary)',
-                  border: '1px solid var(--border-color)',
+                  background: '#030838',
+                  border: '1px solid #0077b6',
                   borderRadius: 'var(--radius-md)',
-                  color: 'var(--text-main)',
+                  color: '#caf0f8',
                   fontSize: '0.9rem'
                 }}
               />
@@ -146,11 +146,11 @@ export default function DSNForm({ onConnect, error, loading }) {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#caf0f8', marginBottom: '6px' }}>
                 User
               </label>
               <div style={{ position: 'relative' }}>
-                <User size={16} style={{ position: 'absolute', left: '12px', top: '12px', color: 'var(--text-dim)' }} />
+                <User size={16} style={{ position: 'absolute', left: '12px', top: '12px', color: '#00b4d8' }} />
                 <input
                   type="text"
                   name="user"
@@ -161,10 +161,10 @@ export default function DSNForm({ onConnect, error, loading }) {
                   style={{
                     width: '100%',
                     padding: '10px 12px 10px 36px',
-                    background: 'var(--bg-secondary)',
-                    border: '1px solid var(--border-color)',
+                    background: '#030838',
+                    border: '1px solid #0077b6',
                     borderRadius: 'var(--radius-md)',
-                    color: 'var(--text-main)',
+                    color: '#caf0f8',
                     fontSize: '0.9rem'
                   }}
                 />
@@ -172,11 +172,11 @@ export default function DSNForm({ onConnect, error, loading }) {
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#caf0f8', marginBottom: '6px' }}>
                 Password
               </label>
               <div style={{ position: 'relative' }}>
-                <Key size={16} style={{ position: 'absolute', left: '12px', top: '12px', color: 'var(--text-dim)' }} />
+                <Key size={16} style={{ position: 'absolute', left: '12px', top: '12px', color: '#00b4d8' }} />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   name="password"
@@ -186,10 +186,10 @@ export default function DSNForm({ onConnect, error, loading }) {
                   style={{
                     width: '100%',
                     padding: '10px 36px 10px 36px',
-                    background: 'var(--bg-secondary)',
-                    border: '1px solid var(--border-color)',
+                    background: '#030838',
+                    border: '1px solid #0077b6',
                     borderRadius: 'var(--radius-md)',
-                    color: 'var(--text-main)',
+                    color: '#caf0f8',
                     fontSize: '0.9rem'
                   }}
                 />
@@ -202,7 +202,7 @@ export default function DSNForm({ onConnect, error, loading }) {
                     top: '10px',
                     background: 'none',
                     border: 'none',
-                    color: 'var(--text-muted)',
+                    color: '#00b4d8',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
@@ -217,11 +217,11 @@ export default function DSNForm({ onConnect, error, loading }) {
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#caf0f8', marginBottom: '6px' }}>
               SSL Mode
             </label>
             <div style={{ position: 'relative' }}>
-              <ShieldCheck size={16} style={{ position: 'absolute', left: '12px', top: '12px', color: 'var(--text-dim)' }} />
+              <ShieldCheck size={16} style={{ position: 'absolute', left: '12px', top: '12px', color: '#00b4d8' }} />
               <select
                 name="sslmode"
                 value={formData.sslmode}
@@ -229,10 +229,10 @@ export default function DSNForm({ onConnect, error, loading }) {
                 style={{
                   width: '100%',
                   padding: '10px 12px 10px 36px',
-                  background: 'var(--bg-secondary)',
-                  border: '1px solid var(--border-color)',
+                  background: '#030838',
+                  border: '1px solid #0077b6',
                   borderRadius: 'var(--radius-md)',
-                  color: 'var(--text-main)',
+                  color: '#caf0f8',
                   fontSize: '0.9rem'
                 }}
               >
@@ -248,7 +248,7 @@ export default function DSNForm({ onConnect, error, loading }) {
             type="submit"
             className="btn btn-primary"
             disabled={loading}
-            style={{ width: '100%', padding: '14px', marginTop: '10px', fontSize: '1rem' }}
+            style={{ width: '100%', padding: '12px', marginTop: '10px', fontSize: '0.95rem' }}
           >
             {loading ? (
               <>
@@ -266,3 +266,9 @@ export default function DSNForm({ onConnect, error, loading }) {
     </div>
   );
 }
+
+
+
+
+
+

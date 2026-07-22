@@ -10,10 +10,22 @@ export default function ReportPage({ reportResult, isConnected }) {
   if (!reportResult || !reportResult.data) {
     return (
       <div style={{ maxWidth: '600px', margin: '40px auto', padding: '0 20px', textAlign: 'center' }}>
-        <div className="glass-panel animate-fade-in" style={{ padding: '40px' }}>
-          <Info size={36} color="var(--accent-cyan)" style={{ marginBottom: '14px', opacity: 0.8 }} />
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '8px' }}>No Report Generated Yet</h3>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginBottom: '24px' }}>
+        <div className="panel panel-amber animate-fade-in" style={{ padding: '40px' }}>
+          <div style={{
+            width: '56px',
+            height: '56px',
+            borderRadius: '12px',
+            background: '#0a194f',
+            border: '1px solid #0077b6',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto 16px auto'
+          }}>
+            <Info size={26} color="#00b4d8" />
+          </div>
+          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '8px', color: '#caf0f8' }}>No Report Generated Yet</h3>
+          <p style={{ color: '#90e0ef', fontSize: '0.88rem', marginBottom: '24px' }}>
             Select table columns in the Schema Builder and click "Fetch Report Data" to generate query results.
           </p>
           <button onClick={() => navigate('/schema')} className="btn btn-primary" style={{ padding: '12px 24px' }}>

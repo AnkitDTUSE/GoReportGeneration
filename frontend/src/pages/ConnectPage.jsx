@@ -14,23 +14,23 @@ export default function ConnectPage({ onConnect, error, loading, isConnected, co
   if (isConnected) {
     return (
       <div style={{ maxWidth: '540px', margin: '40px auto', padding: '0 20px' }}>
-        <div className="glass-panel animate-fade-in" style={{ padding: '36px', textAlign: 'center' }}>
+        <div className="panel panel-emerald animate-fade-in" style={{ padding: '36px', textAlign: 'center' }}>
           <div style={{
             width: '56px',
             height: '56px',
-            borderRadius: '16px',
-            background: 'rgba(16, 185, 129, 0.15)',
-            border: '1px solid rgba(16, 185, 129, 0.4)',
+            borderRadius: '12px',
+            background: '#0a194f',
+            border: '1px solid #0077b6',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             margin: '0 auto 16px auto'
           }}>
-            <CheckCircle2 size={28} color="var(--accent-emerald)" />
+            <CheckCircle2 size={26} color="#00b4d8" />
           </div>
-          <h2 style={{ fontSize: '1.4rem', fontWeight: 800 }}>Database Connected</h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginTop: '6px', marginBottom: '24px' }}>
-            Connected to <strong>{connectionInfo?.dbname || 'PostgreSQL DB'}</strong> on host <strong>{connectionInfo?.host || 'localhost'}</strong>.
+          <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#caf0f8' }}>Database Connected</h2>
+          <p style={{ color: '#90e0ef', fontSize: '0.9rem', marginTop: '6px', marginBottom: '24px' }}>
+            Connected to <strong style={{ color: '#caf0f8' }}>{connectionInfo?.dbname || 'PostgreSQL DB'}</strong> on host <strong style={{ color: '#caf0f8' }}>{connectionInfo?.host || 'localhost'}</strong>.
           </p>
 
           <button
@@ -53,3 +53,4 @@ export default function ConnectPage({ onConnect, error, loading, isConnected, co
     />
   );
 }
+

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Table as TableIcon, Key, Link as LinkIcon, CheckSquare, Square, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { Table as TableIcon, Key, CheckSquare, Square, ShieldCheck } from 'lucide-react';
 
 export default function SchemaViewer({ schema, selectedColumns, onToggleColumn, onWarnUnreachable }) {
   const { tables = [], relationships = [] } = schema || {};
@@ -68,21 +68,21 @@ export default function SchemaViewer({ schema, selectedColumns, onToggleColumn, 
 
   return (
     <div style={{ marginBottom: '32px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <TableIcon size={20} color="var(--accent-cyan)" />
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '10px', color: '#caf0f8' }}>
+            <TableIcon size={20} color="#00b4d8" />
             Database Tables Schema
           </h2>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+          <p style={{ fontSize: '0.85rem', color: '#90e0ef', marginTop: '4px' }}>
             Click columns to build your query. Table relations are strictly validated to prevent invalid joins.
           </p>
         </div>
 
         {selectedTableNames.length > 0 && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(99, 102, 241, 0.12)', border: '1px solid var(--accent-indigo)', padding: '6px 14px', borderRadius: '20px', fontSize: '0.82rem' }}>
-            <ShieldCheck size={16} color="var(--accent-indigo)" />
-            <span>Active Joint Base: <strong style={{ color: 'var(--accent-cyan)' }}>{selectedTableNames.join(', ')}</strong></span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#0a194f', border: '1px solid #0077b6', padding: '6px 14px', borderRadius: '6px', fontSize: '0.82rem', color: '#caf0f8' }}>
+            <ShieldCheck size={16} color="#00b4d8" />
+            <span>Active Joint Base: <strong style={{ color: '#caf0f8' }}>{selectedTableNames.join(', ')}</strong></span>
           </div>
         )}
       </div>
@@ -101,8 +101,8 @@ export default function SchemaViewer({ schema, selectedColumns, onToggleColumn, 
             >
               {/* Table Title & Status Badge */}
               <div className="table-row-header">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 700, fontSize: '1.1rem' }}>
-                  <TableIcon size={20} color={isSelectedTable ? 'var(--accent-cyan)' : 'var(--text-muted)'} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 700, fontSize: '1.05rem', color: '#caf0f8' }}>
+                  <TableIcon size={18} color={isSelectedTable ? '#00b4d8' : '#90e0ef'} />
                   <span>{t.name}</span>
                 </div>
                 <div>
@@ -111,7 +111,7 @@ export default function SchemaViewer({ schema, selectedColumns, onToggleColumn, 
                       {selectedColsForTable.length} Selected
                     </span>
                   ) : isReachable ? (
-                    <span className="badge badge-fk" style={{ opacity: 0.8 }}>
+                    <span className="badge badge-fk">
                       Selectable
                     </span>
                   ) : (
@@ -123,7 +123,7 @@ export default function SchemaViewer({ schema, selectedColumns, onToggleColumn, 
               </div>
 
               {/* Divider line */}
-              <div style={{ width: '1px', height: '40px', background: 'var(--border-color)', flexShrink: 0 }} />
+              <div style={{ width: '1px', height: '40px', background: '#0077b6', flexShrink: 0 }} />
 
               {/* Columns Row */}
               <div className="table-row-columns">
@@ -136,18 +136,18 @@ export default function SchemaViewer({ schema, selectedColumns, onToggleColumn, 
                       onClick={() => handleColumnClick(t.name, col.name, isReachable)}
                     >
                       {isColSelected ? (
-                        <CheckSquare size={16} color="var(--accent-cyan)" />
+                        <CheckSquare size={15} color="#03045e" />
                       ) : (
-                        <Square size={16} color="var(--text-dim)" />
+                        <Square size={15} color="#00b4d8" />
                       )}
-                      <span style={{ fontWeight: 600, fontSize: '0.9rem' }}>{col.name}</span>
+                      <span style={{ fontWeight: 600, fontSize: '0.88rem' }}>{col.name}</span>
 
                       {col.primaryKey && (
                         <span className="badge badge-pk" title="Primary Key">
                           <Key size={10} /> PK
                         </span>
                       )}
-                      <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>
+                      <span style={{ fontSize: '0.75rem', opacity: 0.85, fontFamily: 'var(--font-mono)' }}>
                         {col.dataType}
                       </span>
                     </div>
@@ -161,3 +161,9 @@ export default function SchemaViewer({ schema, selectedColumns, onToggleColumn, 
     </div>
   );
 }
+
+
+
+
+
+

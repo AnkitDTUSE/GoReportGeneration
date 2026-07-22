@@ -38,24 +38,24 @@ export default function SchemaPage({
 
       {!isConnected ? (
         /* If not connected, show connection prompt banner */
-        <div className="glass-panel" style={{ padding: '36px', textAlign: 'center', margin: '24px 0' }}>
+        <div className="panel panel-amber" style={{ padding: '36px', textAlign: 'center', margin: '24px 0' }}>
           <div style={{
             width: '56px',
             height: '56px',
-            borderRadius: '16px',
-            background: 'rgba(245, 158, 11, 0.15)',
-            border: '1px solid rgba(245, 158, 11, 0.4)',
+            borderRadius: '12px',
+            background: '#0a194f',
+            border: '1px solid #0077b6',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             margin: '0 auto 16px auto'
           }}>
-            <AlertCircle size={28} color="var(--accent-amber)" />
+            <AlertCircle size={26} color="#00b4d8" />
           </div>
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '8px' }}>
+          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '8px', color: '#caf0f8' }}>
             Database Connection Required for Schema
           </h3>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', maxWidth: '500px', margin: '0 auto 24px auto', lineHeight: '1.6' }}>
+          <p style={{ color: '#90e0ef', fontSize: '0.88rem', maxWidth: '500px', margin: '0 auto 24px auto', lineHeight: '1.6' }}>
             You are viewing the Schema Builder in offline mode. Connect your PostgreSQL database DSN to analyze live table structures and generate reports.
           </p>
           <button onClick={() => navigate('/')} className="btn btn-primary" style={{ padding: '12px 24px' }}>
@@ -64,23 +64,23 @@ export default function SchemaPage({
         </div>
       ) : (!schema.tables || schema.tables.length === 0) ? (
         /* If database is empty */
-        <div className="glass-panel animate-fade-in" style={{ padding: '48px 36px', textAlign: 'center', maxWidth: '580px', margin: '24px auto' }}>
+        <div className="panel panel-amber animate-fade-in" style={{ padding: '48px 36px', textAlign: 'center', maxWidth: '580px', margin: '24px auto' }}>
           <div style={{
             width: '56px',
             height: '56px',
-            borderRadius: '16px',
-            background: 'rgba(245, 158, 11, 0.15)',
-            border: '1px solid rgba(245, 158, 11, 0.4)',
+            borderRadius: '12px',
+            background: '#0a194f',
+            border: '1px solid #0077b6',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             margin: '0 auto 16px auto'
           }}>
-            <DatabaseBackup size={28} color="var(--accent-amber)" />
+            <DatabaseBackup size={26} color="#00b4d8" />
           </div>
-          <h3 style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '8px' }}>Empty Database Detected</h3>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', lineHeight: '1.6', marginBottom: '24px' }}>
-            The database <strong style={{ color: 'var(--accent-amber)' }}>{connectionInfo?.dbname || ''}</strong> is connected, but contains no tables or schema attributes.
+          <h3 style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '8px', color: '#caf0f8' }}>Empty Database Detected</h3>
+          <p style={{ color: '#90e0ef', fontSize: '0.88rem', lineHeight: '1.6', marginBottom: '24px' }}>
+            The database <strong style={{ color: '#caf0f8' }}>{connectionInfo?.dbname || ''}</strong> is connected, but contains no tables or schema attributes.
           </p>
           <button onClick={() => { onResetConnection(); navigate('/'); }} className="btn btn-primary" style={{ padding: '10px 20px' }}>
             <RefreshCw size={16} /> Change DSN Connection
@@ -112,3 +112,4 @@ export default function SchemaPage({
     </div>
   );
 }
+

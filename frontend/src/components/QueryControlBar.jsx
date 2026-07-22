@@ -14,35 +14,35 @@ export default function QueryControlBar({ selectedColumns, onFetchData, onClear,
   });
 
   return (
-    <div className="glass-panel" style={{ padding: '18px 24px', marginBottom: '28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
+    <div className="panel panel-indigo" style={{ padding: '18px 24px', marginBottom: '28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
         <div style={{
-          background: 'rgba(99, 102, 241, 0.15)',
+          background: '#0a194f',
           padding: '10px 14px',
           borderRadius: 'var(--radius-md)',
-          border: '1px solid rgba(99, 102, 241, 0.3)',
+          border: '1px solid #0077b6',
           display: 'flex',
           alignItems: 'center',
           gap: '10px'
         }}>
-          <Layers size={20} color="var(--accent-indigo)" />
+          <Layers size={20} color="#00b4d8" />
           <div>
-            <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Query Selection</div>
-            <div style={{ fontSize: '0.92rem', fontWeight: 700, color: '#ffffff' }}>
+            <div style={{ fontSize: '0.78rem', color: '#90e0ef' }}>Query Selection</div>
+            <div style={{ fontSize: '0.92rem', fontWeight: 700, color: '#caf0f8' }}>
               {totalCols > 0 ? (
                 <>
                   {totalCols} Columns across {activeTables.length} Table{activeTables.length > 1 ? 's' : ''}
                 </>
               ) : (
-                <span style={{ color: 'var(--text-dim)', fontWeight: 400 }}>No columns selected yet</span>
+                <span style={{ color: '#00b4d8', fontWeight: 400 }}>No columns selected yet</span>
               )}
             </div>
           </div>
         </div>
 
         {activeTables.length > 0 && (
-          <div style={{ fontSize: '0.83rem', color: 'var(--text-muted)' }}>
-            Selected: <strong style={{ color: 'var(--accent-cyan)' }}>{activeTables.join(', ')}</strong>
+          <div style={{ fontSize: '0.83rem', color: '#90e0ef' }}>
+            Selected: <strong style={{ color: '#caf0f8' }}>{activeTables.join(', ')}</strong>
           </div>
         )}
       </div>
@@ -51,11 +51,11 @@ export default function QueryControlBar({ selectedColumns, onFetchData, onClear,
         {totalCols > 0 && (
           <button
             onClick={onClear}
-            className="btn btn-secondary"
+            className="btn btn-danger"
             style={{ fontSize: '0.85rem' }}
           >
             <Trash2 size={16} />
-            Clear
+            Clear Selection
           </button>
         )}
 
@@ -81,3 +81,9 @@ export default function QueryControlBar({ selectedColumns, onFetchData, onClear,
     </div>
   );
 }
+
+
+
+
+
+

@@ -74,9 +74,9 @@ export default function DataTable({ data = [] }) {
 
   if (!data || data.length === 0) {
     return (
-      <div className="glass-panel" style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
-        <Info size={32} style={{ opacity: 0.5, marginBottom: '12px' }} />
-        <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-main)' }}>No Data Returned</h3>
+      <div className="panel panel-emerald" style={{ padding: '40px', textAlign: 'center', color: '#90e0ef' }}>
+        <Info size={32} style={{ opacity: 0.5, marginBottom: '12px', color: '#00b4d8' }} />
+        <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#caf0f8' }}>No Data Returned</h3>
         <p style={{ fontSize: '0.88rem', marginTop: '4px' }}>
           Select columns from table schema above and click "Fetch Report Data" to generate query results.
         </p>
@@ -87,14 +87,14 @@ export default function DataTable({ data = [] }) {
   const isAllSelected = selectedRows.size === filteredData.length && filteredData.length > 0;
 
   return (
-    <div className="glass-panel animate-fade-in" style={{ padding: '24px', marginBottom: '40px' }}>
+    <div className="panel panel-emerald animate-fade-in" style={{ padding: '24px', marginBottom: '40px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <h3 style={{ fontSize: '1.2rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <Table size={20} color="var(--accent-cyan)" />
+          <h3 style={{ fontSize: '1.2rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '10px', color: '#caf0f8' }}>
+            <Table size={20} color="#00b4d8" />
             Query Result Data ({data.length} Rows)
           </h3>
-          <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '2px' }}>
+          <p style={{ fontSize: '0.82rem', color: '#90e0ef', marginTop: '2px' }}>
             Click on any row below to highlight and select it.
           </p>
         </div>
@@ -102,7 +102,7 @@ export default function DataTable({ data = [] }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
           {/* Search filter */}
           <div style={{ position: 'relative' }}>
-            <Search size={16} style={{ position: 'absolute', left: '12px', top: '10px', color: 'var(--text-dim)' }} />
+            <Search size={16} style={{ position: 'absolute', left: '12px', top: '10px', color: '#00b4d8' }} />
             <input
               type="text"
               placeholder="Search results..."
@@ -110,10 +110,10 @@ export default function DataTable({ data = [] }) {
               onChange={(e) => setSearchTerm(e.target.value)}
               style={{
                 padding: '8px 12px 8px 36px',
-                background: 'var(--bg-secondary)',
-                border: '1px solid var(--border-color)',
+                background: '#030838',
+                border: '1px solid #0077b6',
                 borderRadius: 'var(--radius-md)',
-                color: 'var(--text-main)',
+                color: '#caf0f8',
                 fontSize: '0.85rem',
                 minWidth: '220px'
               }}
@@ -123,13 +123,13 @@ export default function DataTable({ data = [] }) {
           {/* Selection counter badge */}
           {selectedRows.size > 0 && (
             <div style={{
-              background: 'rgba(6, 182, 212, 0.15)',
-              border: '1px solid var(--accent-cyan)',
-              color: 'var(--accent-cyan)',
+              background: '#0a194f',
+              border: '1px solid #0077b6',
+              color: '#caf0f8',
               padding: '6px 12px',
               borderRadius: 'var(--radius-md)',
               fontSize: '0.82rem',
-              fontWeight: 600
+              fontWeight: 700
             }}>
               {selectedRows.size} Row{selectedRows.size > 1 ? 's' : ''} Highlighted
             </div>
@@ -155,9 +155,9 @@ export default function DataTable({ data = [] }) {
               <th style={{ width: '44px', textAlign: 'center' }}>
                 <div onClick={toggleSelectAll} style={{ cursor: 'pointer' }}>
                   {isAllSelected ? (
-                    <CheckSquare size={16} color="var(--accent-cyan)" />
+                    <CheckSquare size={16} color="#00b4d8" />
                   ) : (
-                    <Square size={16} color="var(--text-dim)" />
+                    <Square size={16} color="#0077b6" />
                   )}
                 </div>
               </th>
@@ -177,15 +177,15 @@ export default function DataTable({ data = [] }) {
                 >
                   <td style={{ textAlign: 'center' }} onClick={(e) => { e.stopPropagation(); toggleRow(idx); }}>
                     {isRowSelected ? (
-                      <CheckSquare size={16} color="var(--accent-cyan)" />
+                      <CheckSquare size={16} color="#00b4d8" />
                     ) : (
-                      <Square size={16} color="var(--text-dim)" />
+                      <Square size={16} color="#0077b6" />
                     )}
                   </td>
                   {columns.map(col => (
                     <td key={col}>
                       {row[col] === null || row[col] === undefined ? (
-                        <span style={{ color: 'var(--text-dim)', italic: true }}>null</span>
+                        <span style={{ color: '#00b4d8', fontStyle: 'italic' }}>null</span>
                       ) : typeof row[col] === 'boolean' ? (
                         row[col] ? 'true' : 'false'
                       ) : (
@@ -202,3 +202,4 @@ export default function DataTable({ data = [] }) {
     </div>
   );
 }
+

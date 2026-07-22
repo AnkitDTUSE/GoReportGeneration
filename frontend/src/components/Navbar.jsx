@@ -1,6 +1,6 @@
 import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { Database, RefreshCw, CheckCircle2, AlertCircle, LayoutGrid, Bookmark, Table, Server } from 'lucide-react';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
+import { Database, RefreshCw, CheckCircle2, AlertCircle, LayoutGrid, Table, Server } from 'lucide-react';
 
 export default function Navbar({ connectionInfo, onResetConnection, isConnected, selectedColumns = {}, reportResult = null }) {
   const navigate = useNavigate();
@@ -15,22 +15,16 @@ export default function Navbar({ connectionInfo, onResetConnection, isConnected,
   const hasReportData = reportResult && reportResult.data && reportResult.data.length > 0;
 
   return (
-    <header className="glass-panel" style={{
+    <header style={{
       position: 'sticky',
       top: 0,
       zIndex: 100,
       width: '100%',
-      borderRadius: 0,
-      borderTop: 0,
-      borderLeft: 0,
-      borderRight: 0,
-      borderBottom: '1px solid var(--border-color)',
+      borderBottom: '2px solid #00b4d8',
       padding: '14px 32px',
       margin: '0 0 28px 0',
-      background: 'rgba(11, 15, 25, 0.85)',
-      backdropFilter: 'blur(16px)',
-      WebkitBackdropFilter: 'blur(16px)',
-      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.4)'
+      background: '#030838',
+      boxShadow: '0 4px 14px rgba(2, 6, 30, 0.5)'
     }}>
       <div style={{
         maxWidth: '1400px',
@@ -40,31 +34,44 @@ export default function Navbar({ connectionInfo, onResetConnection, isConnected,
         alignItems: 'center',
         gap: '16px'
       }}>
-        {/* Left: Brand Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+        {/* Left: Brand Logo (Redirects to Homepage) */}
+        <Link 
+          to="/" 
+          style={{ 
+            display: 'inline-flex', 
+            alignItems: 'center', 
+            gap: '14px', 
+            textDecoration: 'none', 
+            color: 'inherit',
+            cursor: 'pointer',
+            transition: 'opacity 0.2s ease'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.opacity = '0.85'}
+          onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+          title="Go to Homepage"
+        >
           <div style={{
-            background: 'linear-gradient(135deg, var(--accent-indigo), var(--accent-cyan))',
-            width: '40px',
-            height: '40px',
-            borderRadius: '12px',
+            background: '#00b4d8',
+            width: '38px',
+            height: '38px',
+            borderRadius: '8px',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 0 15px var(--accent-cyan-glow)'
+            justifyContent: 'center'
           }}>
-            <Database size={22} color="#ffffff" />
+            <Database size={20} color="#03045e" />
           </div>
           <div>
-            <h1 style={{ fontSize: '1.2rem', fontWeight: 800, letterSpacing: '-0.02em', background: 'linear-gradient(to right, #ffffff, #9ca3af)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', margin: 0 }}>
-              GoReport Studio
+            <h1 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#caf0f8', margin: 0, letterSpacing: '-0.01em' }}>
+              GOreportGO
             </h1>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: 0 }}>
+            <p style={{ fontSize: '0.75rem', color: '#90e0ef', margin: 0 }}>
               Dynamic Schema & Report Engine
             </p>
           </div>
-        </div>
+        </Link>
 
-        {/* Center: Centered Dynamic Navigation Pills */}
+        {/* Center: Dynamic Navigation Pills */}
         <nav className="nav-container">
           <NavLink
             to="/"
@@ -83,11 +90,12 @@ export default function Navbar({ connectionInfo, onResetConnection, isConnected,
             Schema Builder
             {selectedCount > 0 && (
               <span style={{
-                background: 'rgba(255, 255, 255, 0.25)',
-                color: '#ffffff',
-                padding: '2px 7px',
-                borderRadius: '10px',
-                fontSize: '0.72rem',
+                background: '#0a194f',
+                color: '#caf0f8',
+                border: '1px solid #0077b6',
+                padding: '2px 6px',
+                borderRadius: '4px',
+                fontSize: '0.7rem',
                 fontWeight: 800,
                 marginLeft: '2px'
               }}>
@@ -95,7 +103,6 @@ export default function Navbar({ connectionInfo, onResetConnection, isConnected,
               </span>
             )}
           </NavLink>
-
 
           <NavLink
             to="/report"
@@ -105,11 +112,12 @@ export default function Navbar({ connectionInfo, onResetConnection, isConnected,
             Report Results
             {hasReportData && (
               <span style={{
-                background: 'var(--accent-emerald)',
-                color: '#ffffff',
-                padding: '2px 7px',
-                borderRadius: '10px',
-                fontSize: '0.72rem',
+                background: '#081442',
+                color: '#caf0f8',
+                border: '1px solid #00b4d8',
+                padding: '2px 6px',
+                borderRadius: '4px',
+                fontSize: '0.7rem',
                 fontWeight: 800,
                 marginLeft: '2px'
               }}>
@@ -122,16 +130,16 @@ export default function Navbar({ connectionInfo, onResetConnection, isConnected,
         {/* Right: Connection Info & Reset Button */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '16px' }}>
           {isConnected ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.3)', padding: '5px 14px', borderRadius: '30px' }}>
-              <CheckCircle2 size={16} color="var(--accent-emerald)" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#081442', border: '1px solid #00b4d8', padding: '6px 14px', borderRadius: '6px' }}>
+              <CheckCircle2 size={16} color="#00b4d8" />
               <div style={{ fontSize: '0.82rem' }}>
-                <span style={{ color: 'var(--text-muted)' }}>DB: </span>
-                <strong style={{ color: 'var(--accent-emerald)' }}>{connectionInfo?.dbname || 'Connected'}</strong>
+                <span style={{ color: '#90e0ef' }}>DB: </span>
+                <strong style={{ color: '#caf0f8' }}>{connectionInfo?.dbname || 'Connected'}</strong>
               </div>
               <button 
                 onClick={handleReset}
                 className="btn btn-secondary"
-                style={{ padding: '3px 10px', fontSize: '0.75rem', marginLeft: '6px' }}
+                style={{ padding: '4px 10px', fontSize: '0.75rem', marginLeft: '6px' }}
                 title="Change Database Connection DSN"
               >
                 <RefreshCw size={12} />
@@ -139,7 +147,7 @@ export default function Navbar({ connectionInfo, onResetConnection, isConnected,
               </button>
             </div>
           ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.3)', padding: '5px 14px', borderRadius: '30px', color: 'var(--accent-amber)', fontSize: '0.82rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#0a194f', border: '1px solid #0077b6', padding: '6px 14px', borderRadius: '6px', color: '#caf0f8', fontSize: '0.82rem', fontWeight: 600 }}>
               <AlertCircle size={15} />
               <span>Not Connected</span>
             </div>
@@ -149,3 +157,9 @@ export default function Navbar({ connectionInfo, onResetConnection, isConnected,
     </header>
   );
 }
+
+
+
+
+
+

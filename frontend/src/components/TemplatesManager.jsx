@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Bookmark, Plus, Trash2, Check, Lock, Sparkles, FolderHeart, Info, X, AlertTriangle } from 'lucide-react';
+import { Bookmark, Plus, Trash2, Check, Lock, Sparkles, FolderHeart, X } from 'lucide-react';
 
 const STORAGE_KEY = 'goreport_saved_templates';
 
@@ -91,26 +91,26 @@ export default function TemplatesManager({ selectedColumns, onApplyTemplate }) {
   };
 
   return (
-    <div className="glass-panel" style={{ padding: '20px 24px', marginBottom: '28px' }}>
+    <div className="panel panel-amber" style={{ padding: '20px 24px', marginBottom: '28px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div style={{
-            background: 'rgba(245, 158, 11, 0.15)',
+            background: '#0a194f',
+            border: '1px solid #0077b6',
             padding: '8px',
             borderRadius: 'var(--radius-md)',
-            border: '1px solid rgba(245, 158, 11, 0.3)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-            <Bookmark size={18} color="var(--accent-amber)" />
+            <Bookmark size={18} color="#00b4d8" />
           </div>
           <div>
-            <h3 style={{ fontSize: '1.05rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <h3 style={{ fontSize: '1.05rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', color: '#caf0f8' }}>
               Report Templates
               <span className="badge badge-pk" style={{ fontSize: '0.68rem' }}>Temporary Local</span>
             </h3>
-            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+            <p style={{ fontSize: '0.8rem', color: '#90e0ef' }}>
               Save & reuse column selections for quick report generation.
             </p>
           </div>
@@ -134,9 +134,9 @@ export default function TemplatesManager({ selectedColumns, onApplyTemplate }) {
             onClick={() => setShowLoginModal(true)}
             className="btn"
             style={{
-              background: 'rgba(99, 102, 241, 0.12)',
-              border: '1px solid var(--accent-indigo)',
-              color: 'var(--accent-indigo)',
+              background: '#0a194f',
+              border: '1px solid #0077b6',
+              color: '#caf0f8',
               fontSize: '0.82rem',
               padding: '6px 14px'
             }}
@@ -150,8 +150,8 @@ export default function TemplatesManager({ selectedColumns, onApplyTemplate }) {
       {/* Save Template Modal / Input Form */}
       {isSaving && (
         <form onSubmit={handleSaveTemplate} className="animate-fade-in" style={{
-          background: 'rgba(255, 255, 255, 0.03)',
-          border: '1px solid var(--border-active)',
+          background: '#030838',
+          border: '1px solid #0077b6',
           borderRadius: 'var(--radius-md)',
           padding: '16px',
           marginBottom: '16px',
@@ -160,10 +160,10 @@ export default function TemplatesManager({ selectedColumns, onApplyTemplate }) {
           gap: '12px'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <h4 style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--accent-cyan)' }}>
+            <h4 style={{ fontSize: '0.9rem', fontWeight: 600, color: '#caf0f8' }}>
               Save New Report Template ({currentColsCount} columns selected)
             </h4>
-            <button type="button" onClick={() => setIsSaving(false)} style={{ background: 'none', border: 'none', color: 'var(--text-dim)', cursor: 'pointer' }}>
+            <button type="button" onClick={() => setIsSaving(false)} style={{ background: 'none', border: 'none', color: '#00b4d8', cursor: 'pointer' }}>
               <X size={16} />
             </button>
           </div>
@@ -178,10 +178,10 @@ export default function TemplatesManager({ selectedColumns, onApplyTemplate }) {
               autoFocus
               style={{
                 padding: '8px 12px',
-                background: 'var(--bg-secondary)',
-                border: '1px solid var(--border-color)',
+                background: '#0a194f',
+                border: '1px solid #0077b6',
                 borderRadius: 'var(--radius-sm)',
-                color: 'var(--text-main)',
+                color: '#caf0f8',
                 fontSize: '0.85rem'
               }}
             />
@@ -192,10 +192,10 @@ export default function TemplatesManager({ selectedColumns, onApplyTemplate }) {
               onChange={(e) => setNewTemplateDesc(e.target.value)}
               style={{
                 padding: '8px 12px',
-                background: 'var(--bg-secondary)',
-                border: '1px solid var(--border-color)',
+                background: '#0a194f',
+                border: '1px solid #0077b6',
                 borderRadius: 'var(--radius-sm)',
-                color: 'var(--text-main)',
+                color: '#caf0f8',
                 fontSize: '0.85rem'
               }}
             />
@@ -215,7 +215,7 @@ export default function TemplatesManager({ selectedColumns, onApplyTemplate }) {
       {/* Templates List */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
         {templates.length === 0 ? (
-          <div style={{ fontSize: '0.82rem', color: 'var(--text-dim)', fontStyle: 'italic' }}>
+          <div style={{ fontSize: '0.82rem', color: '#00b4d8', fontStyle: 'italic' }}>
             No saved templates yet. Select columns above and click "Save Current as Template".
           </div>
         ) : (
@@ -226,26 +226,32 @@ export default function TemplatesManager({ selectedColumns, onApplyTemplate }) {
                 key={tpl.id}
                 onClick={() => onApplyTemplate(tpl.selected)}
                 style={{
-                  background: 'var(--bg-secondary)',
-                  border: '1px solid var(--border-color)',
+                  background: '#030838',
+                  border: '1px solid #0077b6',
                   borderRadius: 'var(--radius-md)',
                   padding: '10px 14px',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '12px',
-                  transition: 'all 0.2s ease',
+                  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                   userSelect: 'none'
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--accent-indigo)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border-color)'; }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#00b4d8';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '#0077b6';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
               >
-                <FolderHeart size={18} color="var(--accent-amber)" style={{ flexShrink: 0 }} />
+                <FolderHeart size={18} color="#00b4d8" style={{ flexShrink: 0 }} />
                 <div>
-                  <div style={{ fontWeight: 600, fontSize: '0.88rem', color: 'var(--text-main)' }}>
+                  <div style={{ fontWeight: 600, fontSize: '0.88rem', color: '#caf0f8' }}>
                     {tpl.name}
                   </div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>
+                  <div style={{ fontSize: '0.75rem', color: '#90e0ef' }}>
                     {colsCount} columns • {tpl.description}
                   </div>
                 </div>
@@ -256,13 +262,14 @@ export default function TemplatesManager({ selectedColumns, onApplyTemplate }) {
                   style={{
                     background: 'none',
                     border: 'none',
-                    color: 'var(--text-dim)',
+                    color: '#00b4d8',
                     cursor: 'pointer',
                     padding: '4px',
-                    marginLeft: '4px'
+                    marginLeft: '4px',
+                    transition: 'color 0.2s ease'
                   }}
-                  onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--accent-rose)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--text-dim)'; }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = '#f87171'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = '#00b4d8'; }}
                 >
                   <Trash2 size={14} />
                 </button>
@@ -277,7 +284,7 @@ export default function TemplatesManager({ selectedColumns, onApplyTemplate }) {
         <div style={{
           marginTop: '12px',
           fontSize: '0.8rem',
-          color: 'var(--accent-emerald)',
+          color: '#00b4d8',
           display: 'flex',
           alignItems: 'center',
           gap: '6px'
@@ -295,33 +302,32 @@ export default function TemplatesManager({ selectedColumns, onApplyTemplate }) {
           left: 0,
           right: 0,
           bottom: 0,
-          background: 'rgba(0, 0, 0, 0.75)',
-          backdropFilter: 'blur(6px)',
+          background: 'rgba(3, 8, 56, 0.85)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           zIndex: 1000
         }}>
-          <div className="glass-panel animate-fade-in" style={{ padding: '28px 32px', maxWidth: '440px', width: '90%', textAlign: 'center' }}>
+          <div className="panel animate-fade-in" style={{ padding: '28px 32px', maxWidth: '440px', width: '90%', textAlign: 'center', borderLeft: '4px solid #f87171' }}>
             <div style={{
               width: '52px',
               height: '52px',
-              borderRadius: '16px',
-              background: 'rgba(244, 63, 94, 0.15)',
-              border: '1px solid rgba(244, 63, 94, 0.4)',
+              borderRadius: '12px',
+              background: 'rgba(248, 113, 113, 0.15)',
+              border: '1px solid #f87171',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               margin: '0 auto 16px auto'
             }}>
-              <Trash2 size={26} color="var(--accent-rose)" />
+              <Trash2 size={24} color="#f87171" />
             </div>
 
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '8px' }}>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '8px', color: '#caf0f8' }}>
               Delete Template?
             </h3>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', lineHeight: '1.5', marginBottom: '24px' }}>
-              Are you sure you want to delete <strong style={{ color: 'var(--text-main)' }}>"{templateToDelete.name}"</strong>? This template will be permanently removed.
+            <p style={{ color: '#90e0ef', fontSize: '0.88rem', lineHeight: '1.5', marginBottom: '24px' }}>
+              Are you sure you want to delete <strong style={{ color: '#caf0f8' }}>"{templateToDelete.name}"</strong>? This template will be permanently removed.
             </p>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
@@ -354,36 +360,35 @@ export default function TemplatesManager({ selectedColumns, onApplyTemplate }) {
           left: 0,
           right: 0,
           bottom: 0,
-          background: 'rgba(0, 0, 0, 0.7)',
-          backdropFilter: 'blur(6px)',
+          background: 'rgba(3, 8, 56, 0.85)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           zIndex: 1000
         }}>
-          <div className="glass-panel animate-fade-in" style={{ padding: '32px', maxWidth: '460px', width: '90%', textAlign: 'center' }}>
+          <div className="panel animate-fade-in" style={{ padding: '32px', maxWidth: '460px', width: '90%', textAlign: 'center', borderLeft: '4px solid #00b4d8' }}>
             <div style={{
               width: '56px',
               height: '56px',
-              borderRadius: '16px',
-              background: 'rgba(99, 102, 241, 0.15)',
-              border: '1px solid var(--accent-indigo)',
+              borderRadius: '12px',
+              background: '#0a194f',
+              border: '1px solid #0077b6',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               margin: '0 auto 16px auto'
             }}>
-              <Lock size={28} color="var(--accent-indigo)" />
+              <Lock size={26} color="#00b4d8" />
             </div>
 
-            <h3 style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '8px' }}>
+            <h3 style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '8px', color: '#caf0f8' }}>
               Cloud Template Sync
             </h3>
             <span className="badge badge-pk" style={{ marginBottom: '16px' }}>
               ⚠️ Feature Under Development
             </span>
 
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', lineHeight: '1.6', marginBottom: '24px' }}>
+            <p style={{ color: '#90e0ef', fontSize: '0.88rem', lineHeight: '1.6', marginBottom: '24px' }}>
               User authentication and cloud template database persistence are currently under active development!
               <br /><br />
               In the meantime, your report templates are safely saved in your <strong>browser session (Local Storage)</strong> and ready to use anytime.
@@ -402,3 +407,9 @@ export default function TemplatesManager({ selectedColumns, onApplyTemplate }) {
     </div>
   );
 }
+
+
+
+
+
+
