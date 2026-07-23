@@ -45,5 +45,6 @@ func main() {
 		port = "8080"
 	}
 
+	log.Printf("Server starting at 0.0.0.0:%s", port)
 	app.Run("0.0.0.0:" + port)
 }
