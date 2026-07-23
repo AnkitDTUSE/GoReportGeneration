@@ -12,7 +12,7 @@ import (
 
 func main() {
 	if err := config.LoadENV(); err != nil {
-		log.Fatal(err)
+		log.Println("Warning: .env file not found, using system environment variables:", err)
 	}
 
 	if err := config.ConnectDB(); err != nil {
@@ -45,5 +45,5 @@ func main() {
 		port = "8080"
 	}
 
-	app.Run(":" + port)
+	app.Run("0.0.0.0:" + port)
 }
