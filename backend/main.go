@@ -11,15 +11,13 @@ import (
 )
 
 func main() {
-	if err := config.LoadENV(); err != nil {
-		log.Println("Warning: .env file not found, using system environment variables:", err)
-	}
+	config.LoadENV()
 
 	if err := config.ConnectDB(); err != nil {
-		log.Fatal(err)
+		log.Println("Warning: Default database connection failed (you can still connect dynamically via UI):", err)
+	} else if os.Getenv("DSN") != "" {
+		fmt.Println("DB connected!!")
 	}
-
-	fmt.Println("DB connected!!")
 
 	app := gin.Default()
 

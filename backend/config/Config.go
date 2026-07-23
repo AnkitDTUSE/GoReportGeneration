@@ -1,7 +1,6 @@
 package config
 
 import (
-	"errors"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -12,14 +11,15 @@ import (
 var DB *gorm.DB
 
 func LoadENV() error {
-	return godotenv.Load()
+	_ = godotenv.Load()
+	return nil
 }
 
 func ConnectDB() error {
 	dsn := os.Getenv("DSN");
 
 	if dsn == ""{
-		return errors.New("invalid DSN")
+		return nil
 	}
 
 	dbConn, err := gorm.Open(postgres.Open(dsn), &gorm.Config{}) 
