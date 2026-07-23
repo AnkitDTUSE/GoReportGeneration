@@ -10,6 +10,7 @@ import { AlertTriangle, X } from 'lucide-react';
 
 import LocomotiveScroll from 'locomotive-scroll';
 import 'locomotive-scroll/dist/locomotive-scroll.css';
+import api from './api/axios';
 
 export default function App() {
   const [isConnected, setIsConnected] = useState(false);
@@ -105,7 +106,7 @@ export default function App() {
 
   const handleResetConnection = async () => {
     try {
-      await fetch('/api/v1/disconnect', { method: 'POST' });
+      await api.post('/api/v1/disconnect');
     } catch (e) {
       console.error('Failed to reset DB connection on backend:', e);
     }
@@ -138,28 +139,16 @@ export default function App() {
       setLoadingSchema(true);
       setError(null);
 
-      const res = await fetch('/api/v1/connDb', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(dsnPayload)
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || 'Failed to connect to database');
-      }
+      const res = await api.post('/api/v1/connDb', dsnPayload);
+      const data = res.data;
 
       // If backend returned schema directly
       if (data.tables) {
         setSchema(data);
       } else {
         // Fetch schema
-        const schemaRes = await fetch('/api/v1/getDets');
-        if (schemaRes.ok) {
-          const schemaData = await schemaRes.json();
-          setSchema(schemaData);
-        }
+        const schemaRes = await api.get('/api/v1/getDets');
+        setSchema(schemaRes.data);
       }
 
       setIsConnected(true);
@@ -167,8 +156,9 @@ export default function App() {
       setSelectedColumns({});
       setReportResult(null);
     } catch (err) {
-      setError(err.message || 'Database connection failed');
-      throw err;
+      const errorMsg = err.response?.data?.error || err.message || 'Database connection failed';
+      setError(errorMsg);
+      throw new Error(errorMsg);
     } finally {
       setLoadingSchema(false);
     }
@@ -233,22 +223,11 @@ export default function App() {
         having: having
       };
 
-      const res = await fetch('/api/v1/getData', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || 'Failed to retrieve data from database');
-      }
-
-      setReportResult(data);
+      const res = await api.post('/api/v1/getData', payload);
+      setReportResult(res.data);
       return true;
     } catch (err) {
-      setError(err.message || 'Error fetching report data');
+      setError(err.response?.data?.error || err.message || 'Error fetching report data');
       return false;
     } finally {
       setLoadingReport(false);
