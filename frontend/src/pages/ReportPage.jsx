@@ -62,9 +62,9 @@ export default function ReportPage({
         ) : !hasData ? (
           <div className="panel" style={{ padding: '36px', textAlign: 'center' }}>
             <Info size={24} color="var(--text-muted)" style={{ marginBottom: '10px' }} />
-            <h3 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '6px', color: 'var(--text-primary)' }}>No Report Yet</h3>
+            <h3 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '6px', color: 'var(--text-primary)' }}>Empty Results</h3>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginBottom: '18px', maxWidth: '380px', margin: '0 auto 18px auto', lineHeight: '1.5' }}>
-              Select columns in the Schema Builder or pick a template to generate results.
+              Tables are empty or no matching records found.
             </p>
             <button onClick={() => navigate('/schema')} className="btn btn-primary" style={{ padding: '9px 20px' }}>
               <Play size={14} /> Schema Builder

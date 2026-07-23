@@ -12,8 +12,32 @@ import (
 	"gorm.io/gorm"
 )
 
+type Filter struct {
+	Table    string `json:"table"`
+	Column   string `json:"column"`
+	Operator string `json:"operator"` // "=", "!=", ">", "<", ">=", "<=", "LIKE", "ILIKE", etc.
+	Value    string `json:"value"`
+}
+
+type OrderBy struct {
+	Table     string `json:"table"`
+	Column    string `json:"column"`
+	Direction string `json:"direction"` // "ASC" or "DESC"
+}
+
+type Having struct {
+	Table    string `json:"table"`
+	Column   string `json:"column"`
+	Operator string `json:"operator"`
+	Value    string `json:"value"`
+}
+
 type CreateQueryRequest struct {
 	Selected map[string][]string `json:"selected"`
+	Filters  []Filter            `json:"filters"`
+	OrderBy  []OrderBy           `json:"orderBy"`
+	GroupBy  []string            `json:"groupBy"`
+	Having   []Having            `json:"having"`
 }
 
 type RelEdge struct {
@@ -168,9 +192,96 @@ func BuildQueryFromSchema(schema *DatabaseSchema, req *CreateQueryRequest) (stri
 		}
 	}
 
+	// 1. WHERE
+	var whereClauses []string
+	validOperators := map[string]bool{
+		"=": true, "!=": true, ">": true, "<": true, ">=": true, "<=": true,
+		"LIKE": true, "ILIKE": true, "NOT LIKE": true, "NOT ILIKE": true,
+		"IS NULL": true, "IS NOT NULL": true,
+	}
+
+	for _, f := range req.Filters {
+		if !neededTables[f.Table] {
+			continue
+		}
+		op := strings.ToUpper(strings.TrimSpace(f.Operator))
+		if !validOperators[op] {
+			return "", fmt.Errorf("invalid operator: %s", f.Operator)
+		}
+
+		colIdent := fmt.Sprintf("%s.%s", quoteIdent(f.Table), quoteIdent(f.Column))
+		if op == "IS NULL" || op == "IS NOT NULL" {
+			whereClauses = append(whereClauses, fmt.Sprintf("%s %s", colIdent, op))
+		} else {
+			whereClauses = append(whereClauses, fmt.Sprintf("%s %s '%s'", colIdent, op, escapeString(f.Value)))
+		}
+	}
+
+	// 2. GROUP BY
+	var groupByClauses []string
+	for _, g := range req.GroupBy {
+		parts := strings.Split(g, ".")
+		if len(parts) == 2 {
+			if neededTables[parts[0]] {
+				groupByClauses = append(groupByClauses, fmt.Sprintf("%s.%s", quoteIdent(parts[0]), quoteIdent(parts[1])))
+			}
+		}
+	}
+
+	// 3. HAVING
+	var havingClauses []string
+	for _, h := range req.Having {
+		if !neededTables[h.Table] {
+			continue
+		}
+		op := strings.ToUpper(strings.TrimSpace(h.Operator))
+		if !validOperators[op] {
+			return "", fmt.Errorf("invalid operator in HAVING: %s", h.Operator)
+		}
+
+		var expr string
+		if strings.Contains(h.Column, "(") && strings.Contains(h.Column, ")") {
+			expr = h.Column
+		} else {
+			expr = fmt.Sprintf("%s.%s", quoteIdent(h.Table), quoteIdent(h.Column))
+		}
+
+		if op == "IS NULL" || op == "IS NOT NULL" {
+			havingClauses = append(havingClauses, fmt.Sprintf("%s %s", expr, op))
+		} else {
+			havingClauses = append(havingClauses, fmt.Sprintf("%s %s '%s'", expr, op, escapeString(h.Value)))
+		}
+	}
+
+	// 4. ORDER BY
+	var orderByClauses []string
+	for _, o := range req.OrderBy {
+		if !neededTables[o.Table] {
+			continue
+		}
+		dir := strings.ToUpper(strings.TrimSpace(o.Direction))
+		if dir != "ASC" && dir != "DESC" {
+			dir = "ASC"
+		}
+		orderByClauses = append(orderByClauses, fmt.Sprintf("%s.%s %s", quoteIdent(o.Table), quoteIdent(o.Column), dir))
+	}
+
+	// Assemble final query
 	query := fmt.Sprintf("SELECT %s FROM %s", strings.Join(selectCols, ", "), quoteIdent(baseTable))
 	if len(joinClauses) > 0 {
 		query += " " + strings.Join(joinClauses, " ")
+	}
+	if len(whereClauses) > 0 {
+		query += " WHERE " + strings.Join(whereClauses, " AND ")
+	}
+	if len(groupByClauses) > 0 {
+		query += " GROUP BY " + strings.Join(groupByClauses, ", ")
+	}
+	if len(havingClauses) > 0 {
+		query += " HAVING " + strings.Join(havingClauses, " AND ")
+	}
+	if len(orderByClauses) > 0 {
+		query += " ORDER BY " + strings.Join(orderByClauses, ", ")
 	}
 	query += ";"
 
@@ -208,4 +319,8 @@ func CreateQuery(c *gin.Context, db *gorm.DB) (string, error) {
 
 func quoteIdent(s string) string {
 	return "\"" + strings.ReplaceAll(s, "\"", "\"\"") + "\""
+}
+
+func escapeString(val string) string {
+	return strings.ReplaceAll(val, "'", "''")
 }

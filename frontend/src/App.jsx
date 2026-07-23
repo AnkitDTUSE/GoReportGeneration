@@ -23,14 +23,48 @@ export default function App() {
   const [error, setError] = useState(null);
   const [warningToast, setWarningToast] = useState(null);
 
+  // Filtration States
+  const [filters, setFilters] = useState([]);
+  const [orderBy, setOrderBy] = useState([]);
+  const [groupBy, setGroupBy] = useState([]);
+  const [having, setHaving] = useState([]);
+
   const scrollContainerRef = useRef(null);
   const [scrollY, setScrollY] = useState(0);
   const location = useLocation();
 
   useEffect(() => {
+    const isReportPage = location.pathname === '/report';
+
+    if (isReportPage) {
+      // Revert completely to native scrolling for report pages to prevent scroll lock conflicts
+      setScrollY(0);
+
+      // Explicitly strip any scroll-lock states or classes left over by Locomotive Scroll
+      document.documentElement.classList.remove('has-scroll-smooth');
+      document.body.classList.remove('has-scroll-smooth');
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      document.documentElement.style.height = '';
+      document.body.style.height = '';
+
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.style.transform = '';
+        scrollContainerRef.current.style.height = '';
+      }
+
+      const handleNativeScroll = () => {
+        setScrollY(window.scrollY || document.documentElement.scrollTop);
+      };
+      window.addEventListener('scroll', handleNativeScroll);
+      return () => {
+        window.removeEventListener('scroll', handleNativeScroll);
+      };
+    }
+
     if (!scrollContainerRef.current) return;
 
-    // Initialize LocomotiveScroll
+    // Initialize LocomotiveScroll for other pages
     const scrollInstance = new LocomotiveScroll({
       el: scrollContainerRef.current,
       smooth: true,
@@ -81,6 +115,10 @@ export default function App() {
     setSelectedColumns({});
     setReportResult(null);
     setError(null);
+    setFilters([]);
+    setOrderBy([]);
+    setGroupBy([]);
+    setHaving([]);
   };
 
   // Apply a report template's column selection
@@ -88,6 +126,10 @@ export default function App() {
     if (!templateSelectedColumns) return;
     setSelectedColumns(templateSelectedColumns);
     setReportResult(null);
+    setFilters([]);
+    setOrderBy([]);
+    setGroupBy([]);
+    setHaving([]);
   };
 
   // Connect to DB via DSN Details
@@ -164,6 +206,10 @@ export default function App() {
   const handleClearSelection = () => {
     setSelectedColumns({});
     setReportResult(null);
+    setFilters([]);
+    setOrderBy([]);
+    setGroupBy([]);
+    setHaving([]);
   };
 
   // Fetch Report Data from backend (/api/v1/getData)
@@ -180,7 +226,11 @@ export default function App() {
       const targetSelected = overrideColumns || selectedColumns;
 
       const payload = {
-        selected: targetSelected
+        selected: targetSelected,
+        filters: filters,
+        orderBy: orderBy,
+        groupBy: groupBy,
+        having: having
       };
 
       const res = await fetch('/api/v1/getData', {
@@ -297,6 +347,14 @@ export default function App() {
                     connectionInfo={connectionInfo}
                     onResetConnection={handleResetConnection}
                     onApplyTemplate={handleApplyTemplate}
+                    filters={filters}
+                    setFilters={setFilters}
+                    orderBy={orderBy}
+                    setOrderBy={setOrderBy}
+                    groupBy={groupBy}
+                    setGroupBy={setGroupBy}
+                    having={having}
+                    setHaving={setHaving}
                   />
                 }
               />

@@ -71,6 +71,20 @@ export default function DataTable({ data = [] }) {
     );
   }
 
+  const handleWheel = (e) => {
+    const el = e.currentTarget;
+    const isScrollingUp = e.deltaY < 0;
+    const isScrollingDown = e.deltaY > 0;
+
+    if (isScrollingUp && el.scrollTop === 0) {
+      // Propagate scroll upwards to the main window
+      window.scrollBy({ top: e.deltaY, behavior: 'auto' });
+    } else if (isScrollingDown && el.scrollTop + el.clientHeight >= el.scrollHeight) {
+      // Propagate scroll downwards to the main window
+      window.scrollBy({ top: e.deltaY, behavior: 'auto' });
+    }
+  };
+
   const isAllSelected = selectedRows.size === filteredData.length && filteredData.length > 0;
 
   return (
@@ -124,7 +138,11 @@ export default function DataTable({ data = [] }) {
         </div>
       </div>
 
-      <div className="data-table-wrapper" style={{ maxHeight: '520px', overflowY: 'auto' }}>
+      <div
+        className="data-table-wrapper"
+        style={{ maxHeight: 'calc(100vh - 240px)', overflowY: 'auto' }}
+        onWheel={handleWheel}
+      >
         <table className="data-table">
           <thead>
             <tr>

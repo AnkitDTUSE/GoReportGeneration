@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
+  color-scheme: dark;
+
   /* Tri-Color Accent Palette */
   --grad-blue: #0077B6;
   --grad-violet: #480CA8;
@@ -430,7 +432,7 @@ nav a {
 }
 
 .data-table th {
-  background: rgba(0, 0, 0, 0.25);
+  background: #182030;
   color: var(--text-secondary);
   padding: 10px 14px;
   font-weight: 600;
@@ -503,4 +505,14 @@ html.has-scroll-dragging {
 }
 [data-scroll-container] {
   min-height: 100vh;
+}
+
+/* ─── Dropdown Option Contrast Fix ─── */
+select option {
+  background-color: #1a202c !important; /* Dark background */
+  color: #f3f4f6 !important;            /* High-contrast light text */
+}
+
+select {
+  border-radius: var(--radius-md) !important;
 }
