@@ -2,7 +2,6 @@ import React from 'react';
 import { Play, Trash2, Layers, Loader2 } from 'lucide-react';
 
 export default function QueryControlBar({ selectedColumns, onFetchData, onClear, loading }) {
-  // Count total columns selected across all tables
   let totalCols = 0;
   const activeTables = [];
 
@@ -14,48 +13,49 @@ export default function QueryControlBar({ selectedColumns, onFetchData, onClear,
   });
 
   return (
-    <div className="panel panel-indigo" style={{ padding: '18px 24px', marginBottom: '28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+    <div className="panel" style={{
+      padding: '14px 20px',
+      marginBottom: '24px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      flexWrap: 'wrap',
+      gap: '12px'
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
         <div style={{
-          background: '#0a194f',
-          padding: '10px 14px',
+          background: 'var(--surface-2)',
+          padding: '8px 12px',
           borderRadius: 'var(--radius-md)',
-          border: '1px solid #0077b6',
+          border: '1px solid var(--border)',
           display: 'flex',
           alignItems: 'center',
-          gap: '10px'
+          gap: '8px'
         }}>
-          <Layers size={20} color="#00b4d8" />
+          <Layers size={17} color="var(--text-muted)" />
           <div>
-            <div style={{ fontSize: '0.78rem', color: '#90e0ef' }}>Query Selection</div>
-            <div style={{ fontSize: '0.92rem', fontWeight: 700, color: '#caf0f8' }}>
+            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.03em' }}>Selection</div>
+            <div style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-primary)' }}>
               {totalCols > 0 ? (
-                <>
-                  {totalCols} Columns across {activeTables.length} Table{activeTables.length > 1 ? 's' : ''}
-                </>
+                <>{totalCols} cols · {activeTables.length} table{activeTables.length > 1 ? 's' : ''}</>
               ) : (
-                <span style={{ color: '#00b4d8', fontWeight: 400 }}>No columns selected yet</span>
+                <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>None</span>
               )}
             </div>
           </div>
         </div>
 
         {activeTables.length > 0 && (
-          <div style={{ fontSize: '0.83rem', color: '#90e0ef' }}>
-            Selected: <strong style={{ color: '#caf0f8' }}>{activeTables.join(', ')}</strong>
+          <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+            {activeTables.join(', ')}
           </div>
         )}
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         {totalCols > 0 && (
-          <button
-            onClick={onClear}
-            className="btn btn-danger"
-            style={{ fontSize: '0.85rem' }}
-          >
-            <Trash2 size={16} />
-            Clear Selection
+          <button onClick={onClear} className="btn btn-danger" style={{ fontSize: '0.8rem', padding: '7px 14px' }}>
+            <Trash2 size={14} /> Clear
           </button>
         )}
 
@@ -63,17 +63,17 @@ export default function QueryControlBar({ selectedColumns, onFetchData, onClear,
           onClick={onFetchData}
           className="btn btn-primary"
           disabled={totalCols === 0 || loading}
-          style={{ minWidth: '180px' }}
+          style={{ minWidth: '160px', padding: '8px 16px' }}
         >
           {loading ? (
             <>
-              <Loader2 size={18} className="spin" style={{ animation: 'spin 1s linear infinite' }} />
-              Executing Query...
+              <Loader2 size={15} style={{ animation: 'spin 1s linear infinite' }} />
+              Querying...
             </>
           ) : (
             <>
-              <Play size={18} />
-              Fetch Report Data
+              <Play size={15} />
+              Fetch Report
             </>
           )}
         </button>
@@ -81,9 +81,3 @@ export default function QueryControlBar({ selectedColumns, onFetchData, onClear,
     </div>
   );
 }
-
-
-
-
-
-

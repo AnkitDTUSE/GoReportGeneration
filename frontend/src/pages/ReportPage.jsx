@@ -1,63 +1,84 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import SqlViewer from '../components/SqlViewer';
 import DataTable from '../components/DataTable';
-import { ArrowLeft, Play, Info } from 'lucide-react';
+import TemplatesManager from '../components/TemplatesManager';
+import { ArrowLeft, Play, Info, Loader2 } from 'lucide-react';
 
-export default function ReportPage({ reportResult, isConnected }) {
+export default function ReportPage({
+  reportResult,
+  isConnected,
+  selectedColumns,
+  onApplyTemplate,
+  onFetchData,
+  loadingReport
+}) {
   const navigate = useNavigate();
 
-  if (!reportResult || !reportResult.data) {
-    return (
-      <div style={{ maxWidth: '600px', margin: '40px auto', padding: '0 20px', textAlign: 'center' }}>
-        <div className="panel panel-amber animate-fade-in" style={{ padding: '40px' }}>
-          <div style={{
-            width: '56px',
-            height: '56px',
-            borderRadius: '12px',
-            background: '#0a194f',
-            border: '1px solid #0077b6',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            margin: '0 auto 16px auto'
-          }}>
-            <Info size={26} color="#00b4d8" />
-          </div>
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '8px', color: '#caf0f8' }}>No Report Generated Yet</h3>
-          <p style={{ color: '#90e0ef', fontSize: '0.88rem', marginBottom: '24px' }}>
-            Select table columns in the Schema Builder and click "Fetch Report Data" to generate query results.
-          </p>
-          <button onClick={() => navigate('/schema')} className="btn btn-primary" style={{ padding: '12px 24px' }}>
-            <Play size={16} /> Open Schema Builder
-          </button>
-        </div>
-      </div>
-    );
-  }
+  const handleApplyTemplateAndFetch = async (templateCols) => {
+    if (onApplyTemplate) onApplyTemplate(templateCols);
+    if (onFetchData && isConnected) await onFetchData(templateCols);
+  };
+
+  const hasData = reportResult && reportResult.data && reportResult.data.length > 0;
 
   return (
-    <div className="animate-fade-in">
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px' }}>
-        <div>
-          <h2 style={{ fontSize: '1.4rem', fontWeight: 800 }}>Generated Report View</h2>
-          <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)' }}>
-            Executed SQL query and retrieved dataset. Click any row to highlight.
-          </p>
+    <div className="animate-fade-in" style={{
+      display: 'grid',
+      gridTemplateColumns: 'minmax(0, 1fr) 300px',
+      gap: '24px',
+      alignItems: 'start'
+    }}>
+      {/* Main */}
+      <div style={{ minWidth: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
+          <div>
+            <h2 style={{ fontSize: '1.1rem', fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>Report</h2>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: '2px 0 0 0' }}>
+              Click rows to select. Use templates to switch views.
+            </p>
+          </div>
+          <button onClick={() => navigate('/schema')} className="btn btn-secondary" style={{ fontSize: '0.8rem', padding: '6px 14px' }}>
+            <ArrowLeft size={14} /> Edit Columns
+          </button>
         </div>
 
-        <button onClick={() => navigate('/schema')} className="btn btn-secondary" style={{ fontSize: '0.85rem' }}>
-          <ArrowLeft size={16} /> Modify Query Columns
-        </button>
+        {loadingReport ? (
+          <div className="panel" style={{ padding: '48px', textAlign: 'center' }}>
+            <Loader2 size={28} color="var(--text-muted)" style={{ animation: 'spin 1s linear infinite', marginBottom: '12px' }} />
+            <h4 style={{ color: 'var(--text-primary)', fontSize: '0.95rem', fontWeight: 600 }}>Fetching data...</h4>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Executing query.</p>
+          </div>
+        ) : !isConnected ? (
+          <div className="panel" style={{ padding: '36px', textAlign: 'center' }}>
+            <Info size={24} color="var(--text-muted)" style={{ marginBottom: '10px' }} />
+            <h3 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '6px', color: 'var(--text-primary)' }}>Not Connected</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginBottom: '18px', maxWidth: '380px', margin: '0 auto 18px auto', lineHeight: '1.5' }}>
+              Connect to a database to fetch live report data.
+            </p>
+            <button onClick={() => navigate('/')} className="btn btn-primary" style={{ padding: '9px 20px' }}>
+              Connect DSN
+            </button>
+          </div>
+        ) : !hasData ? (
+          <div className="panel" style={{ padding: '36px', textAlign: 'center' }}>
+            <Info size={24} color="var(--text-muted)" style={{ marginBottom: '10px' }} />
+            <h3 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '6px', color: 'var(--text-primary)' }}>No Report Yet</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginBottom: '18px', maxWidth: '380px', margin: '0 auto 18px auto', lineHeight: '1.5' }}>
+              Select columns in the Schema Builder or pick a template to generate results.
+            </p>
+            <button onClick={() => navigate('/schema')} className="btn btn-primary" style={{ padding: '9px 20px' }}>
+              <Play size={14} /> Schema Builder
+            </button>
+          </div>
+        ) : (
+          <DataTable data={reportResult.data} />
+        )}
       </div>
 
-      {/* Generated SQL Viewer */}
-      {reportResult.query && (
-        <SqlViewer query={reportResult.query} />
-      )}
-
-      {/* Interactive Data Table with Row Highlight */}
-      <DataTable data={reportResult.data} />
+      {/* Sidebar */}
+      <div style={{ position: 'sticky', top: '80px' }}>
+        <TemplatesManager selectedColumns={selectedColumns} onApplyTemplate={handleApplyTemplateAndFetch} />
+      </div>
     </div>
   );
 }

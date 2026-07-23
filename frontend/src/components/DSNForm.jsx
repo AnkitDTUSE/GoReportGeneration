@@ -25,239 +25,158 @@ export default function DSNForm({ onConnect, error, loading }) {
     onConnect(formData);
   };
 
+  const inputStyle = {
+    width: '100%',
+    padding: '9px 12px 9px 34px',
+    background: 'var(--surface-2)',
+    border: '1px solid var(--border)',
+    borderRadius: 'var(--radius-md)',
+    color: 'var(--text-primary)',
+    fontSize: '0.85rem',
+    fontFamily: 'var(--font-sans)',
+    transition: 'border-color 0.15s ease'
+  };
+
+  const labelStyle = {
+    display: 'block',
+    fontSize: '0.75rem',
+    fontWeight: 600,
+    color: 'var(--text-secondary)',
+    marginBottom: '5px',
+    textTransform: 'uppercase',
+    letterSpacing: '0.03em'
+  };
+
+  const iconStyle = {
+    position: 'absolute',
+    left: '10px',
+    top: '11px',
+    color: 'var(--text-muted)'
+  };
+
   return (
-    <div style={{ maxWidth: '540px', margin: '40px auto', padding: '0 20px' }}>
-      <div className="panel panel-blue animate-fade-in" style={{ padding: '36px' }}>
-        <div style={{ textAlign: 'center', marginBottom: '28px' }}>
+    <div style={{ maxWidth: '480px', margin: '48px auto', padding: '0 20px' }}>
+      <div className="panel panel-blue animate-fade-in" style={{ padding: '32px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '24px' }}>
           <div style={{
-            width: '56px',
-            height: '56px',
-            borderRadius: '12px',
-            background: '#00b4d8',
-            border: '1px solid #caf0f8',
+            width: '44px',
+            height: '44px',
+            borderRadius: '10px',
+            background: 'linear-gradient(135deg, var(--grad-blue), var(--grad-violet))',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            margin: '0 auto 16px auto'
+            margin: '0 auto 14px auto'
           }}>
-            <Database size={26} color="#03045e" />
+            <Database size={20} color="#ffffff" />
           </div>
-          <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#caf0f8' }}>Connect to Database</h2>
-          <p style={{ color: '#90e0ef', fontSize: '0.88rem', marginTop: '6px' }}>
-            Provide DSN details for your PostgreSQL database to analyze schema & generate reports.
+          <h2 style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-primary)' }}>Connect to Database</h2>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginTop: '4px' }}>
+            Provide your PostgreSQL DSN to begin.
           </p>
         </div>
 
         {error && (
           <div style={{
-            background: 'rgba(248, 113, 113, 0.15)',
-            border: '1px solid #f87171',
+            background: 'rgba(230, 57, 70, 0.08)',
+            border: '1px solid rgba(230, 57, 70, 0.2)',
             borderRadius: 'var(--radius-md)',
-            padding: '12px 16px',
-            marginBottom: '24px',
+            padding: '10px 14px',
+            marginBottom: '20px',
             display: 'flex',
             alignItems: 'center',
-            gap: '12px',
+            gap: '10px',
             color: '#f87171',
-            fontSize: '0.88rem'
+            fontSize: '0.82rem'
           }}>
-            <AlertCircle size={18} style={{ flexShrink: 0 }} />
+            <AlertCircle size={16} style={{ flexShrink: 0 }} />
             <span>{error}</span>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '14px' }}>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '12px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#caf0f8', marginBottom: '6px' }}>
-                Host
-              </label>
+              <label style={labelStyle}>Host</label>
               <div style={{ position: 'relative' }}>
-                <Server size={16} style={{ position: 'absolute', left: '12px', top: '12px', color: '#00b4d8' }} />
-                <input
-                  type="text"
-                  name="host"
-                  value={formData.host}
-                  onChange={handleChange}
-                  placeholder="e.g. localhost"
-                  required
-                  style={{
-                    width: '100%',
-                    padding: '10px 12px 10px 36px',
-                    background: '#030838',
-                    border: '1px solid #0077b6',
-                    borderRadius: 'var(--radius-md)',
-                    color: '#caf0f8',
-                    fontSize: '0.9rem'
-                  }}
-                />
+                <Server size={14} style={iconStyle} />
+                <input type="text" name="host" value={formData.host} onChange={handleChange} placeholder="localhost" required style={inputStyle} />
               </div>
             </div>
-
             <div>
-              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#caf0f8', marginBottom: '6px' }}>
-                Port
-              </label>
-              <input
-                type="number"
-                name="port"
-                value={formData.port}
-                onChange={handleChange}
-                placeholder="5432"
-                required
-                style={{
-                  width: '100%',
-                  padding: '10px 12px',
-                  background: '#030838',
-                  border: '1px solid #0077b6',
-                  borderRadius: 'var(--radius-md)',
-                  color: '#caf0f8',
-                  fontSize: '0.9rem'
-                }}
-              />
+              <label style={labelStyle}>Port</label>
+              <input type="number" name="port" value={formData.port} onChange={handleChange} placeholder="5432" required
+                style={{ ...inputStyle, paddingLeft: '12px' }} />
             </div>
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#caf0f8', marginBottom: '6px' }}>
-              Database Name
-            </label>
+            <label style={labelStyle}>Database Name</label>
             <div style={{ position: 'relative' }}>
-              <Database size={16} style={{ position: 'absolute', left: '12px', top: '12px', color: '#00b4d8' }} />
-              <input
-                type="text"
-                name="dbname"
-                value={formData.dbname}
-                onChange={handleChange}
-                placeholder="e.g. my_database"
-                required
-                style={{
-                  width: '100%',
-                  padding: '10px 12px 10px 36px',
-                  background: '#030838',
-                  border: '1px solid #0077b6',
-                  borderRadius: 'var(--radius-md)',
-                  color: '#caf0f8',
-                  fontSize: '0.9rem'
-                }}
-              />
+              <Database size={14} style={iconStyle} />
+              <input type="text" name="dbname" value={formData.dbname} onChange={handleChange} placeholder="my_database" required style={inputStyle} />
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#caf0f8', marginBottom: '6px' }}>
-                User
-              </label>
+              <label style={labelStyle}>User</label>
               <div style={{ position: 'relative' }}>
-                <User size={16} style={{ position: 'absolute', left: '12px', top: '12px', color: '#00b4d8' }} />
-                <input
-                  type="text"
-                  name="user"
-                  value={formData.user}
-                  onChange={handleChange}
-                  placeholder="postgres"
-                  required
-                  style={{
-                    width: '100%',
-                    padding: '10px 12px 10px 36px',
-                    background: '#030838',
-                    border: '1px solid #0077b6',
-                    borderRadius: 'var(--radius-md)',
-                    color: '#caf0f8',
-                    fontSize: '0.9rem'
-                  }}
-                />
+                <User size={14} style={iconStyle} />
+                <input type="text" name="user" value={formData.user} onChange={handleChange} placeholder="postgres" required style={inputStyle} />
               </div>
             </div>
-
             <div>
-              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#caf0f8', marginBottom: '6px' }}>
-                Password
-              </label>
+              <label style={labelStyle}>Password</label>
               <div style={{ position: 'relative' }}>
-                <Key size={16} style={{ position: 'absolute', left: '12px', top: '12px', color: '#00b4d8' }} />
+                <Key size={14} style={iconStyle} />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="••••••••"
-                  style={{
-                    width: '100%',
-                    padding: '10px 36px 10px 36px',
-                    background: '#030838',
-                    border: '1px solid #0077b6',
-                    borderRadius: 'var(--radius-md)',
-                    color: '#caf0f8',
-                    fontSize: '0.9rem'
-                  }}
+                  style={{ ...inputStyle, paddingRight: '34px' }}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   style={{
-                    position: 'absolute',
-                    right: '12px',
-                    top: '10px',
-                    background: 'none',
-                    border: 'none',
-                    color: '#00b4d8',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    padding: 0
+                    position: 'absolute', right: '10px', top: '10px',
+                    background: 'none', border: 'none',
+                    color: 'var(--text-muted)', cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', padding: 0
                   }}
-                  title={showPassword ? 'Hide password' : 'Show password'}
                 >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
                 </button>
               </div>
             </div>
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 600, color: '#caf0f8', marginBottom: '6px' }}>
-              SSL Mode
-            </label>
+            <label style={labelStyle}>SSL Mode</label>
             <div style={{ position: 'relative' }}>
-              <ShieldCheck size={16} style={{ position: 'absolute', left: '12px', top: '12px', color: '#00b4d8' }} />
-              <select
-                name="sslmode"
-                value={formData.sslmode}
-                onChange={handleChange}
-                style={{
-                  width: '100%',
-                  padding: '10px 12px 10px 36px',
-                  background: '#030838',
-                  border: '1px solid #0077b6',
-                  borderRadius: 'var(--radius-md)',
-                  color: '#caf0f8',
-                  fontSize: '0.9rem'
-                }}
-              >
-                <option value="disable">disable</option>
-                <option value="require">require</option>
-                <option value="verify-ca">verify-ca</option>
-                <option value="verify-full">verify-full</option>
+              <ShieldCheck size={14} style={iconStyle} />
+              <select name="sslmode" value={formData.sslmode} onChange={handleChange} style={inputStyle}>
+                <option value="disable" style={{ background: '#121826' }}>disable</option>
+                <option value="require" style={{ background: '#121826' }}>require</option>
+                <option value="verify-ca" style={{ background: '#121826' }}>verify-ca</option>
+                <option value="verify-full" style={{ background: '#121826' }}>verify-full</option>
               </select>
             </div>
           </div>
 
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={loading}
-            style={{ width: '100%', padding: '12px', marginTop: '10px', fontSize: '0.95rem' }}
-          >
+          <button type="submit" className="btn btn-primary" disabled={loading}
+            style={{ width: '100%', padding: '10px', marginTop: '6px', fontSize: '0.88rem' }}>
             {loading ? (
               <>
-                <Loader2 size={18} className="spin" style={{ animation: 'spin 1s linear infinite' }} />
-                Connecting & Fetching Schema...
+                <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />
+                Connecting...
               </>
             ) : (
               <>
-                Connect & Load Schema <ArrowRight size={18} />
+                Connect & Load Schema <ArrowRight size={16} />
               </>
             )}
           </button>
@@ -266,9 +185,3 @@ export default function DSNForm({ onConnect, error, loading }) {
     </div>
   );
 }
-
-
-
-
-
-

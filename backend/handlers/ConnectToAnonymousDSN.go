@@ -43,3 +43,18 @@ func ConnectToDB(c *gin.Context) {
 	c.JSON(http.StatusOK, schema)
 }
 
+func DisconnectDB(c *gin.Context) {
+	if AnonymousDB != nil {
+		sqlDB, err := AnonymousDB.DB()
+		if err == nil && sqlDB != nil {
+			sqlDB.Close()
+		}
+		AnonymousDB = nil
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Database connection reset successfully",
+	})
+}
+
+

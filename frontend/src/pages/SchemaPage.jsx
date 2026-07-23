@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import SchemaViewer from '../components/SchemaViewer';
 import RelationshipsPanel from '../components/RelationshipsPanel';
 import QueryControlBar from '../components/QueryControlBar';
-import TemplatesManager from '../components/TemplatesManager';
 import { DatabaseBackup, RefreshCw, Server, AlertCircle } from 'lucide-react';
 
 export default function SchemaPage({
@@ -23,93 +22,42 @@ export default function SchemaPage({
 
   const handleFetchReport = async () => {
     const success = await onFetchData();
-    if (success) {
-      navigate('/report');
-    }
+    if (success) navigate('/report');
   };
 
   return (
     <div className="animate-fade-in">
-      {/* Built-in Report Templates Manager */}
-      <TemplatesManager
-        selectedColumns={selectedColumns}
-        onApplyTemplate={onApplyTemplate}
-      />
-
       {!isConnected ? (
-        /* If not connected, show connection prompt banner */
-        <div className="panel panel-amber" style={{ padding: '36px', textAlign: 'center', margin: '24px 0' }}>
-          <div style={{
-            width: '56px',
-            height: '56px',
-            borderRadius: '12px',
-            background: '#0a194f',
-            border: '1px solid #0077b6',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            margin: '0 auto 16px auto'
-          }}>
-            <AlertCircle size={26} color="#00b4d8" />
-          </div>
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '8px', color: '#caf0f8' }}>
-            Database Connection Required for Schema
+        <div className="panel" style={{ padding: '36px', textAlign: 'center', margin: '24px 0' }}>
+          <AlertCircle size={24} color="var(--text-muted)" style={{ marginBottom: '12px' }} />
+          <h3 style={{ fontSize: '1.05rem', fontWeight: 700, marginBottom: '6px', color: 'var(--text-primary)' }}>
+            Connection Required
           </h3>
-          <p style={{ color: '#90e0ef', fontSize: '0.88rem', maxWidth: '500px', margin: '0 auto 24px auto', lineHeight: '1.6' }}>
-            You are viewing the Schema Builder in offline mode. Connect your PostgreSQL database DSN to analyze live table structures and generate reports.
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', maxWidth: '420px', margin: '0 auto 20px auto', lineHeight: '1.6' }}>
+            Connect your PostgreSQL database to browse table structures and generate reports.
           </p>
-          <button onClick={() => navigate('/')} className="btn btn-primary" style={{ padding: '12px 24px' }}>
-            <Server size={18} /> Connect Database DSN
+          <button onClick={() => navigate('/')} className="btn btn-primary" style={{ padding: '10px 20px' }}>
+            <Server size={15} /> Connect DSN
           </button>
         </div>
       ) : (!schema.tables || schema.tables.length === 0) ? (
-        /* If database is empty */
-        <div className="panel panel-amber animate-fade-in" style={{ padding: '48px 36px', textAlign: 'center', maxWidth: '580px', margin: '24px auto' }}>
-          <div style={{
-            width: '56px',
-            height: '56px',
-            borderRadius: '12px',
-            background: '#0a194f',
-            border: '1px solid #0077b6',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            margin: '0 auto 16px auto'
-          }}>
-            <DatabaseBackup size={26} color="#00b4d8" />
-          </div>
-          <h3 style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '8px', color: '#caf0f8' }}>Empty Database Detected</h3>
-          <p style={{ color: '#90e0ef', fontSize: '0.88rem', lineHeight: '1.6', marginBottom: '24px' }}>
-            The database <strong style={{ color: '#caf0f8' }}>{connectionInfo?.dbname || ''}</strong> is connected, but contains no tables or schema attributes.
+        <div className="panel animate-fade-in" style={{ padding: '40px 32px', textAlign: 'center', maxWidth: '520px', margin: '24px auto' }}>
+          <DatabaseBackup size={24} color="var(--text-muted)" style={{ marginBottom: '12px' }} />
+          <h3 style={{ fontSize: '1.05rem', fontWeight: 700, marginBottom: '6px', color: 'var(--text-primary)' }}>Empty Database</h3>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', lineHeight: '1.6', marginBottom: '20px' }}>
+            <strong style={{ color: 'var(--text-primary)' }}>{connectionInfo?.dbname}</strong> has no tables.
           </p>
-          <button onClick={() => { onResetConnection(); navigate('/'); }} className="btn btn-primary" style={{ padding: '10px 20px' }}>
-            <RefreshCw size={16} /> Change DSN Connection
+          <button onClick={() => { onResetConnection(); navigate('/'); }} className="btn btn-secondary" style={{ padding: '8px 18px' }}>
+            <RefreshCw size={14} /> Change DSN
           </button>
         </div>
       ) : (
-        /* Active Connected Schema View */
         <div>
-          {/* Table Relationships Panel */}
           <RelationshipsPanel relationships={schema.relationships} />
-
-          {/* Tables Row View (table 1 -> col1 col2 ...) */}
-          <SchemaViewer
-            schema={schema}
-            selectedColumns={selectedColumns}
-            onToggleColumn={onToggleColumn}
-            onWarnUnreachable={onWarnUnreachable}
-          />
-
-          {/* Query Control Bar */}
-          <QueryControlBar
-            selectedColumns={selectedColumns}
-            onFetchData={handleFetchReport}
-            onClear={onClearSelection}
-            loading={loadingReport}
-          />
+          <SchemaViewer schema={schema} selectedColumns={selectedColumns} onToggleColumn={onToggleColumn} onWarnUnreachable={onWarnUnreachable} />
+          <QueryControlBar selectedColumns={selectedColumns} onFetchData={handleFetchReport} onClear={onClearSelection} loading={loadingReport} />
         </div>
       )}
     </div>
   );
 }
-

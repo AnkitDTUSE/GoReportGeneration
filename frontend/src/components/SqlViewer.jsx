@@ -13,26 +13,19 @@ export default function SqlViewer({ query }) {
   };
 
   return (
-    <div style={{ marginBottom: '28px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.88rem', fontWeight: 600, color: '#caf0f8' }}>
-          <Terminal size={16} color="#00b4d8" />
-          <span>Generated SQL Query (Backend Execution)</span>
+    <div style={{ marginBottom: '24px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '7px', fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
+          <Terminal size={14} color="var(--text-muted)" />
+          <span>Generated SQL</span>
         </div>
-        <button
-          onClick={handleCopy}
-          className="btn btn-secondary"
-          style={{ padding: '4px 10px', fontSize: '0.75rem' }}
-        >
-          {copied ? <Check size={14} color="#00b4d8" /> : <Copy size={14} />}
-          {copied ? 'Copied!' : 'Copy SQL'}
+        <button onClick={handleCopy} className="btn btn-secondary" style={{ padding: '3px 8px', fontSize: '0.72rem' }}>
+          {copied ? <Check size={12} color="#34d399" /> : <Copy size={12} />}
+          {copied ? 'Copied' : 'Copy'}
         </button>
       </div>
 
-      <div className="sql-box">
-        {query}
-      </div>
+      <div className="sql-box">{query}</div>
     </div>
   );
 }
-

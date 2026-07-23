@@ -23,7 +23,6 @@ func main() {
 
 	app := gin.Default()
 
-	// CORS Middleware
 	app.Use(func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
@@ -46,6 +45,5 @@ func main() {
 		port = "8080"
 	}
 
-	app.
-	Run(":" + port)
+	app.Run(":" + port)
 }

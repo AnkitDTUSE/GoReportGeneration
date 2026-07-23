@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import PageTransition from './components/PageTransition';
+import SneakyMascots from './components/SneakyMascots';
 import ConnectPage from './pages/ConnectPage';
 import SchemaPage from './pages/SchemaPage';
 import ReportPage from './pages/ReportPage';
 import { AlertTriangle, X } from 'lucide-react';
+
+import LocomotiveScroll from 'locomotive-scroll';
+import 'locomotive-scroll/dist/locomotive-scroll.css';
 
 export default function App() {
   const [isConnected, setIsConnected] = useState(false);
@@ -18,7 +23,58 @@ export default function App() {
   const [error, setError] = useState(null);
   const [warningToast, setWarningToast] = useState(null);
 
-  const handleResetConnection = () => {
+  const scrollContainerRef = useRef(null);
+  const [scrollY, setScrollY] = useState(0);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!scrollContainerRef.current) return;
+
+    // Initialize LocomotiveScroll
+    const scrollInstance = new LocomotiveScroll({
+      el: scrollContainerRef.current,
+      smooth: true,
+      multiplier: 1.0,
+      touchMultiplier: 2.0,
+      firefoxMultiplier: 50,
+      useKeyboard: true
+    });
+
+    // Listen to scroll events to update state
+    scrollInstance.on('scroll', (instance) => {
+      setScrollY(instance.scroll.y);
+    });
+
+    // Re-calculate page height dynamically on content updates
+    const resizeObserver = new ResizeObserver(() => {
+      scrollInstance.update();
+    });
+    resizeObserver.observe(scrollContainerRef.current);
+
+    const handleResize = () => {
+      scrollInstance.update();
+    };
+    window.addEventListener('resize', handleResize);
+
+    // Initial update after DOM settles
+    const timer = setTimeout(() => {
+      scrollInstance.update();
+    }, 150);
+
+    return () => {
+      scrollInstance.destroy();
+      resizeObserver.disconnect();
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(timer);
+    };
+  }, [location.pathname]); // Recreate/reset on route changes
+
+  const handleResetConnection = async () => {
+    try {
+      await fetch('/api/v1/disconnect', { method: 'POST' });
+    } catch (e) {
+      console.error('Failed to reset DB connection on backend:', e);
+    }
     setIsConnected(false);
     setConnectionInfo(null);
     setSchema({ tables: [], relationships: [] });
@@ -111,13 +167,20 @@ export default function App() {
   };
 
   // Fetch Report Data from backend (/api/v1/getData)
-  const handleFetchReportData = async () => {
+  const handleFetchReportData = async (overrideColumns) => {
+    if (!isConnected) {
+      setError('Database connection required. Please connect your database DSN first to generate reports.');
+      return false;
+    }
+
     try {
       setLoadingReport(true);
       setError(null);
 
+      const targetSelected = overrideColumns || selectedColumns;
+
       const payload = {
-        selected: selectedColumns
+        selected: targetSelected
       };
 
       const res = await fetch('/api/v1/getData', {
@@ -152,99 +215,113 @@ export default function App() {
         reportResult={reportResult}
       />
 
-      <main style={{ maxWidth: '1400px', width: '100%', margin: '0 auto', padding: '0 32px 60px 32px', flex: 1 }}>
-        {/* Warning Toast */}
-        {warningToast && (
-          <div className="animate-fade-in" style={{
-            background: 'rgba(245, 158, 11, 0.15)',
-            border: '1px solid rgba(245, 158, 11, 0.4)',
-            borderRadius: 'var(--radius-md)',
-            padding: '14px 18px',
-            marginBottom: '24px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            color: 'var(--accent-amber)',
-            fontSize: '0.88rem'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <AlertTriangle size={20} style={{ flexShrink: 0 }} />
-              <span>{warningToast}</span>
+      <div
+        data-scroll-container
+        ref={scrollContainerRef}
+        style={{ flex: 1, width: '100%' }}
+      >
+        <main style={{ maxWidth: '1400px', width: '100%', margin: '0 auto', padding: '94px 32px 60px 32px' }}>
+          {/* Warning Toast */}
+          {warningToast && (
+            <div className="toast-enter" style={{
+              background: 'rgba(245, 158, 11, 0.12)',
+              border: '1px solid rgba(245, 158, 11, 0.3)',
+              borderRadius: 'var(--radius-md)',
+              padding: '12px 16px',
+              marginBottom: '20px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              color: '#f59e0b',
+              fontSize: '0.84rem'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <AlertTriangle size={20} style={{ flexShrink: 0 }} />
+                <span>{warningToast}</span>
+              </div>
+              <button onClick={() => setWarningToast(null)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
+                <X size={16} />
+              </button>
             </div>
-            <button onClick={() => setWarningToast(null)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
-              <X size={16} />
-            </button>
-          </div>
-        )}
+          )}
 
-        {/* Global Error Banner */}
-        {error && (
-          <div className="animate-fade-in" style={{
-            background: 'rgba(244, 63, 94, 0.15)',
-            border: '1px solid rgba(244, 63, 94, 0.4)',
-            borderRadius: 'var(--radius-md)',
-            padding: '14px 18px',
-            marginBottom: '24px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            color: 'var(--accent-rose)',
-            fontSize: '0.88rem'
-          }}>
-            <span>{error}</span>
-            <button onClick={() => setError(null)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
-              <X size={16} />
-            </button>
-          </div>
-        )}
+          {/* Global Error Banner */}
+          {error && (
+            <div className="toast-enter" style={{
+              background: 'rgba(244, 63, 94, 0.12)',
+              border: '1px solid rgba(244, 63, 94, 0.3)',
+              borderRadius: 'var(--radius-md)',
+              padding: '12px 16px',
+              marginBottom: '20px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              color: '#f87171',
+              fontSize: '0.84rem'
+            }}>
+              <span>{error}</span>
+              <button onClick={() => setError(null)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
+                <X size={16} />
+              </button>
+            </div>
+          )}
 
-        {/* Multi-Page Routes */}
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <ConnectPage
-                onConnect={handleConnectDSN}
-                error={error}
-                loading={loadingSchema}
-                isConnected={isConnected}
-                connectionInfo={connectionInfo}
+          {/* Multi-Page Routes with transitions */}
+          <PageTransition>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <ConnectPage
+                    onConnect={handleConnectDSN}
+                    error={error}
+                    loading={loadingSchema}
+                    isConnected={isConnected}
+                    connectionInfo={connectionInfo}
+                  />
+                }
               />
-            }
-          />
 
-          <Route
-            path="/schema"
-            element={
-              <SchemaPage
-                schema={schema}
-                selectedColumns={selectedColumns}
-                onToggleColumn={handleToggleColumn}
-                onWarnUnreachable={handleWarnUnreachable}
-                onFetchData={handleFetchReportData}
-                onClearSelection={handleClearSelection}
-                loadingReport={loadingReport}
-                isConnected={isConnected}
-                connectionInfo={connectionInfo}
-                onResetConnection={handleResetConnection}
-                onApplyTemplate={handleApplyTemplate}
+              <Route
+                path="/schema"
+                element={
+                  <SchemaPage
+                    schema={schema}
+                    selectedColumns={selectedColumns}
+                    onToggleColumn={handleToggleColumn}
+                    onWarnUnreachable={handleWarnUnreachable}
+                    onFetchData={handleFetchReportData}
+                    onClearSelection={handleClearSelection}
+                    loadingReport={loadingReport}
+                    isConnected={isConnected}
+                    connectionInfo={connectionInfo}
+                    onResetConnection={handleResetConnection}
+                    onApplyTemplate={handleApplyTemplate}
+                  />
+                }
               />
-            }
-          />
 
-          <Route
-            path="/report"
-            element={
-              <ReportPage
-                reportResult={reportResult}
-                isConnected={isConnected}
+              <Route
+                path="/report"
+                element={
+                  <ReportPage
+                    reportResult={reportResult}
+                    isConnected={isConnected}
+                    selectedColumns={selectedColumns}
+                    onApplyTemplate={handleApplyTemplate}
+                    onFetchData={handleFetchReportData}
+                    loadingReport={loadingReport}
+                  />
+                }
               />
-            }
-          />
 
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </main>
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </PageTransition>
+        </main>
+      </div>
+
+      <SneakyMascots scrollY={scrollY} />
     </div>
   );
 }
